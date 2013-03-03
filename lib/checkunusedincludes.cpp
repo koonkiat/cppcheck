@@ -33,6 +33,20 @@
 
 void CheckUnusedIncludes::parseTokens(const Tokenizer &tokenizer)
 {
+	parseTokensForDeclaredTypes(tokenizer);
+	parseTokensForRequiredTypes(tokenizer);
+	parseTokensForIncludes(tokenizer);
+}
+void CheckUnusedIncludes::parseTokensForIncludes(const Tokenizer &tokenizer)
+{
+	tokenizer;
+}
+void CheckUnusedIncludes::parseTokensForDeclaredTypes(const Tokenizer &tokenizer)
+{
+	tokenizer;
+}
+void CheckUnusedIncludes::parseTokensForRequiredTypes(const Tokenizer &tokenizer)
+{
     // Function declarations..
     for (const Token *tok = tokenizer.tokens(); tok; tok = tok->next()) {
         if (tok->fileIndex() != 0)
@@ -51,31 +65,31 @@ void CheckUnusedIncludes::parseTokens(const Tokenizer &tokenizer)
         if (tok->previous() && tok->previous()->str() == ">")
             continue;
 
-        const Token *includename = 0;
+        const Token *funcname = 0;
 
         if (Token::Match(tok, "%type% %var% ("))
-            includename = tok->next();
+            funcname = tok->next();
         else if (Token::Match(tok, "%type% *|& %var% ("))
-            includename = tok->tokAt(2);
+            funcname = tok->tokAt(2);
         else if (Token::Match(tok, "%type% :: %var% (") && !Token::Match(tok, tok->strAt(2).c_str()))
-            includename = tok->tokAt(2);
+            funcname = tok->tokAt(2);
 
         // Don't assume throw as a function name: void foo() throw () {}
-        if (Token::Match(tok->previous(), ")|const") || includename == 0)
+        if (Token::Match(tok->previous(), ")|const") || funcname == 0)
             continue;
 
-        tok = includename->linkAt(1);
+        tok = funcname->linkAt(1);
 
         // Check that ") {" is found..
         if (! Token::Match(tok, ") const| {") &&
             ! Token::Match(tok, ") const| throw ( ) {"))
-            includename = 0;
+            funcname = 0;
 
-        if (includename) {
-            IncludeUsage &func = _includes[ includename->str()];
+        if (funcname) {
+            IncludeUsage &func = _includes[ funcname->str()];
 
             if (!func.lineNumber)
-                func.lineNumber = includename->linenr();
+                func.lineNumber = funcname->linenr();
 
             // No filename set yet..
             if (func.filename.empty()) {
@@ -105,36 +119,36 @@ void CheckUnusedIncludes::parseTokens(const Tokenizer &tokenizer)
         }
 
 
-        const Token *includename = 0;
+        const Token *funcname = 0;
 
         if (Token::Match(tok->next(), "%var% (")) {
-            includename = tok->next();
+            funcname = tok->next();
         }
 
         else if (Token::Match(tok, "[;{}.,()[=+-/&|!?:] %var% [(),;:}]"))
-            includename = tok->next();
+            funcname = tok->next();
 
         else if (Token::Match(tok, "[=(,] &| %var% :: %var%")) {
-            includename = tok->next();
-            if (includename->str() == "&")
-                includename = includename->next();
-            while (Token::Match(includename,"%var% :: %var%"))
-                includename = includename->tokAt(2);
-            if (!Token::Match(includename, "%var% [,);]"))
+            funcname = tok->next();
+            if (funcname->str() == "&")
+                funcname = funcname->next();
+            while (Token::Match(funcname,"%var% :: %var%"))
+                funcname = funcname->tokAt(2);
+            if (!Token::Match(funcname, "%var% [,);]"))
                 continue;
         }
 
         else
             continue;
 
-        // includename ( => Assert that the end parentheses isn't followed by {
-        if (Token::Match(includename, "%var% (")) {
-            if (Token::Match(includename->linkAt(1), ") const|throw|{"))
-                includename = NULL;
+        // funcname ( => Assert that the end parentheses isn't followed by {
+        if (Token::Match(funcname, "%var% (")) {
+            if (Token::Match(funcname->linkAt(1), ") const|throw|{"))
+                funcname = NULL;
         }
 
-        if (includename) {
-            IncludeUsage &func = _includes[ includename->str()];
+        if (funcname) {
+            IncludeUsage &func = _includes[ funcname->str()];
 
             if (func.filename.empty() || func.filename == "+")
                 func.usedOtherFile = true;

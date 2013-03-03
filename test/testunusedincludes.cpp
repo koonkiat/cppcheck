@@ -64,30 +64,21 @@ private:
 			ASSERT_EQUALS(true, Token::Match(enumIsType.tokens(), "%type%"));
 		}
 		{
-			givenACodeSampleToTokenize classIsType("class myClass{}; myClass c;", true);
-			ASSERT_EQUALS(true, Token::Match(classIsType.tokens(), "%type%"));
-		}
-		{
 			givenACodeSampleToTokenize classIsType2("myClass c;", true);
 			ASSERT_EQUALS(true, Token::Match(classIsType2.tokens(), "%type% %var%"));
 		}
     }
     void matchIncludes() {
-        {
-			givenACodeSampleToTokenize include_quote("#include \"abc.h\";");
-			ASSERT_EQUALS(true, Token::Match(include_quote.tokens(), "#include"));
-			ASSERT_EQUALS(true, Token::Match(include_quote.tokens(), "#include %str%"));
-		}
 		{
-			givenACodeSampleToTokenize include_angle("#include <abc.h>;");
+			givenACodeSampleToTokenize include_angle("#define SOMETHING \n#include <abc.h>;");
+			// std::cout << include_angle.tokens()->stringifyList(true, true, true,true,true) << std::endl; 
+			const Token *tok = include_angle.tokens();
+			ASSERT_EQUALS(false, Token::Match(tok, "#include"));
 
-			std::cout << include_angle.tokens()->stringifyList(true, true, true,true,true) << std::endl; 
-			ASSERT_EQUALS(true, Token::Match(include_angle.tokens(), "#include <"));
-			ASSERT_EQUALS(true, Token::Match(include_angle.tokens(), "#include [<>]"));
-			ASSERT_EQUALS(true, Token::Match(include_angle.tokens(), "#include <    %any%"));
-			
-			ASSERT_EQUALS(true, Token::Match(include_angle.tokens(), "#include <%str%>"));
-			//ASSERT_EQUALS(true, Token::Match(classIsType2.tokens(), "#include %var%"));
+			tok = tok->next()->next();
+			ASSERT_EQUALS(true, Token::Match(tok, "#include"));
+			std::string includeName = tok->strAt(2);
+			ASSERT_EQUALS("abc", includeName.c_str());
 		}
     }
 };
