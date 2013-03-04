@@ -208,7 +208,8 @@ bool Path::isCPP(const std::string &path)
 
 bool Path::acceptFile(const std::string &path)
 {
-    return !Path::isHeader(path) && (Path::isCPP(path) || Path::isC(path));
+    return Path::isHeader(path) || Path::isCPP(path) || Path::isC(path);
+    //return !Path::isHeader(path) && (Path::isCPP(path) || Path::isC(path));
 }
 
 bool Path::isHeader(const std::string &path)

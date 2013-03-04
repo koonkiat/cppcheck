@@ -44,4 +44,9 @@ public:
     }
 };
 
+struct FileCodePair {
+	std::ostringstream filename;
+	std::string code;
+	FileCodePair(std::string _filename, std::string _code):filename(_filename), code(_code) { }
+};
 #endif//ndef TestUtilsH

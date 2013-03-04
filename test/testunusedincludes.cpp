@@ -16,6 +16,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+// test path - header is allowed now
+#include "path.h"
 
 #include "tokenize.h"
 #include "testsuite.h"
@@ -34,6 +36,10 @@ private:
 
 
     void run() {
+
+		// test path
+		TEST_CASE(accept_file);
+
 
 		TEST_CASE(matchType);
         TEST_CASE(matchIncludes);
@@ -58,7 +64,23 @@ private:
         CheckUnusedIncludes.parseTokens(tokenizer);
         CheckUnusedIncludes.check(this);
     }
+	
+	// test path
+	void accept_file() const {
+        ASSERT(Path::acceptFile("index.cpp"));
+        ASSERT(Path::acceptFile("index.invalid.cpp"));
+        ASSERT(Path::acceptFile("index.invalid.Cpp"));
+        ASSERT(Path::acceptFile("index.invalid.C"));
+        ASSERT(Path::acceptFile("index.invalid.C++"));
+        ASSERT(Path::acceptFile("index.")==false);
+        ASSERT(Path::acceptFile("index")==false);
+        ASSERT(Path::acceptFile("")==false);
+        ASSERT(Path::acceptFile("C")==false);
 
+        // we accept any headers now
+        ASSERT_EQUALS(true, Path::acceptFile("index.h"));
+        ASSERT_EQUALS(true, Path::acceptFile("index.hpp"));
+    }
 	
     void matchType() {
 		{
@@ -114,6 +136,38 @@ private:
         const CheckUnusedIncludes::IncludeMap& includeMap = CheckUnusedIncludes.GetIncludeMap();
         ASSERT_EQUALS(true, includeMap.find("abc.h") != includeMap.end());
         ASSERT_EQUALS(true, includeMap.find("xyz.hpp") != includeMap.end());
+    }
+	
+    void multipleFiles1() {
+		CheckUnusedIncludes c;
+
+        // Clear the error buffer..
+        errout.str("");
+
+		FileCodePair file1h("file1.h", "#include <stdio>");
+		FileCodePair file1cpp("file1.cpp", "#include \"file1.h\";");
+		
+		const FileCodePair* arr[] = {&file1h, &file1cpp};
+		
+        for (int i = 0; i < 2; ++i) {
+            // Clear the error buffer..
+            errout.str("");
+            Settings settings;
+            Tokenizer tokenizer(&settings, this);
+
+            std::istringstream istr(arr[i]->code);
+            tokenizer.tokenize(istr, arr[i]->filename.str().c_str());
+
+            c.parseTokens(tokenizer);
+        }
+
+        // Check for unused functions..
+        c.check(this);
+		
+        ASSERT_EQUALS(2, c.GetIncludeMap().size());
+        const CheckUnusedIncludes::IncludeMap& includeMap = c.GetIncludeMap();
+        ASSERT_EQUALS(true, includeMap.find("stdio") != includeMap.end());
+        ASSERT_EQUALS(true, includeMap.find("file1.h") != includeMap.end());
     }
 };
 
