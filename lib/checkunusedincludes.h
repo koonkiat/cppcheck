@@ -51,6 +51,19 @@ public:
 
     void check(ErrorLogger * const errorLogger);
 
+    class CPPCHECKLIB IncludeUsage {
+    public:
+        IncludeUsage() : lineNumber(0), usedSameFile(false), usedOtherFile(false)
+        { }
+
+        std::string filename;
+        unsigned int lineNumber;
+        bool   usedSameFile;
+        bool   usedOtherFile;
+    };
+    typedef std::map<std::string, IncludeUsage> IncludeMap;
+    const IncludeMap& GetIncludeMap() { return _includes; }
+
 private:
 
     void getErrorMessages(ErrorLogger *errorLogger, const Settings *settings) const {
@@ -80,18 +93,7 @@ private:
         return "Check for includes that are never called\n";
     }
 
-    class CPPCHECKLIB IncludeUsage {
-    public:
-        IncludeUsage() : lineNumber(0), usedSameFile(false), usedOtherFile(false)
-        { }
-
-        std::string filename;
-        unsigned int lineNumber;
-        bool   usedSameFile;
-        bool   usedOtherFile;
-    };
-
-    std::map<std::string, IncludeUsage> _includes;
+    IncludeMap _includes;
 };
 /// @}
 //---------------------------------------------------------------------------

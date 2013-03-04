@@ -1,397 +1,1273 @@
 <?xml version="1.0" encoding="Windows-1252"?>
 <VisualStudioProject
 	ProjectType="Visual C++"
-	Version="9,00"
+	Version="9.00"
 	Name="testrunner"
 	ProjectGUID="{C12BFD22-DEB4-317D-85AA-16B4E3CBAC5F}"
-	Keyword="Qt4VSv1.0">
+	Keyword="Qt4VSv1.0"
+	TargetFrameworkVersion="0"
+	>
 	<Platforms>
 		<Platform
-			Name="Win32" />
+			Name="Win32"
+		/>
 	</Platforms>
+	<ToolFiles>
+	</ToolFiles>
 	<Configurations>
 		<Configuration
 			Name="Debug|Win32"
 			OutputDirectory="debug\"
-			ATLMinimizesCRunTimeLibraryUsage="false"
-			ConfigurationType="1"
 			IntermediateDirectory="temp\"
-			UseOfMfc="0">
+			ConfigurationType="1"
+			UseOfMFC="0"
+			ATLMinimizesCRunTimeLibraryUsage="false"
+			>
 			<Tool
-				Name="VCCLCompilerTool"
-				AdditionalIncludeDirectories="&quot;.&quot;,&quot;..\cli&quot;,&quot;..\lib&quot;,&quot;..\externals\tinyxml&quot;,..\..\..\..\Qt\4.8.1\mkspecs\win32-msvc2008"
-				AdditionalOptions="-Zm200 -w34100 -w34189"
-				AssemblerListingLocation="temp\"
-				BufferSecurityCheck="false"
-				DebugInformationFormat="3"
-				ExceptionHandling="1"
-				GeneratePreprocessedFile="0"
-				ObjectFile="temp\"
-				Optimization ="4"
-				PreprocessorDefinitions="_CONSOLE,UNICODE,WIN32,QT_LARGEFILE_SUPPORT,_CRT_SECURE_NO_WARNINGS"
-				ProgramDataBaseFileName=".\"
-				RuntimeLibrary="3"
-				RuntimeTypeInfo="true"
-				SuppressStartupBanner="true"
-				TreatWChar_tAsBuiltInType="false"
-				WarningLevel="4" />
+				Name="VCPreBuildEventTool"
+			/>
 			<Tool
-				Name="VCCustomBuildTool" />
+				Name="VCCustomBuildTool"
+			/>
 			<Tool
-				Name="VCLinkerTool"
-				AdditionalDependencies="shlwapi.lib"
-				AdditionalOptions="&quot;/MANIFESTDEPENDENCY:type=&apos;win32&apos; name=&apos;Microsoft.Windows.Common-Controls&apos; version=&apos;6.0.0.0&apos; publicKeyToken=&apos;6595b64144ccf1df&apos; language=&apos;*&apos; processorArchitecture=&apos;*&apos;&quot;"
-				GenerateDebugInformation="true"
-				IgnoreImportLibrary="true"
-				LinkTimeCodeGeneration="0"
-				OutputFile="$(OutDir)\testrunner.exe"
-				ProgramDatabaseFile=""
-				SubSystem="1"
-				SuppressStartupBanner="true" />
+				Name="VCXMLDataGeneratorTool"
+			/>
+			<Tool
+				Name="VCWebServiceProxyGeneratorTool"
+			/>
 			<Tool
 				Name="VCMIDLTool"
+				WarningLevel="0"
 				DefaultCharType="0"
 				EnableErrorChecks="1"
-				WarningLevel="0" />
+			/>
 			<Tool
-				Name="VCPostBuildEventTool" />
+				Name="VCCLCompilerTool"
+				AdditionalOptions="-Zm200 -w34100 -w34189"
+				Optimization="4"
+				AdditionalIncludeDirectories="&quot;.&quot;,&quot;..\cli&quot;,&quot;..\lib&quot;,&quot;..\externals\tinyxml&quot;,..\..\..\..\Qt\4.8.1\mkspecs\win32-msvc2008"
+				PreprocessorDefinitions="_CONSOLE,UNICODE,WIN32,QT_LARGEFILE_SUPPORT,_CRT_SECURE_NO_WARNINGS"
+				GeneratePreprocessedFile="0"
+				ExceptionHandling="1"
+				RuntimeLibrary="3"
+				BufferSecurityCheck="false"
+				TreatWChar_tAsBuiltInType="false"
+				RuntimeTypeInfo="true"
+				AssemblerListingLocation="temp\"
+				ObjectFile="temp\"
+				ProgramDataBaseFileName=".\"
+				WarningLevel="4"
+				SuppressStartupBanner="true"
+				DebugInformationFormat="3"
+			/>
 			<Tool
-				Name="VCPreBuildEventTool" />
-			<Tool
-				Name="VCPreLinkEventTool" />
+				Name="VCManagedResourceCompilerTool"
+			/>
 			<Tool
 				Name="VCResourceCompilerTool"
-				PreprocessorDefinitions="_CONSOLE,UNICODE,WIN32,QT_LARGEFILE_SUPPORT,_CRT_SECURE_NO_WARNINGS,_DEBUG" />
+				PreprocessorDefinitions="_CONSOLE,UNICODE,WIN32,QT_LARGEFILE_SUPPORT,_CRT_SECURE_NO_WARNINGS,_DEBUG"
+			/>
+			<Tool
+				Name="VCPreLinkEventTool"
+			/>
+			<Tool
+				Name="VCLinkerTool"
+				IgnoreImportLibrary="true"
+				AdditionalOptions="&quot;/MANIFESTDEPENDENCY:type=&apos;win32&apos; name=&apos;Microsoft.Windows.Common-Controls&apos; version=&apos;6.0.0.0&apos; publicKeyToken=&apos;6595b64144ccf1df&apos; language=&apos;*&apos; processorArchitecture=&apos;*&apos;&quot;"
+				AdditionalDependencies="shlwapi.lib"
+				OutputFile="$(OutDir)\testrunner.exe"
+				SuppressStartupBanner="true"
+				GenerateDebugInformation="true"
+				ProgramDatabaseFile=""
+				SubSystem="1"
+				LinkTimeCodeGeneration="0"
+			/>
+			<Tool
+				Name="VCALinkTool"
+			/>
+			<Tool
+				Name="VCManifestTool"
+			/>
+			<Tool
+				Name="VCXDCMakeTool"
+			/>
+			<Tool
+				Name="VCBscMakeTool"
+			/>
+			<Tool
+				Name="VCFxCopTool"
+			/>
+			<Tool
+				Name="VCAppVerifierTool"
+			/>
+			<Tool
+				Name="VCPostBuildEventTool"
+			/>
 		</Configuration>
 		<Configuration
 			Name="Release|Win32"
 			OutputDirectory="release\"
-			ATLMinimizesCRunTimeLibraryUsage="false"
-			ConfigurationType="1"
 			IntermediateDirectory="temp\"
-			UseOfMfc="0">
+			ConfigurationType="1"
+			UseOfMFC="0"
+			ATLMinimizesCRunTimeLibraryUsage="false"
+			>
 			<Tool
-				Name="VCCLCompilerTool"
-				AdditionalIncludeDirectories="&quot;.&quot;,&quot;..\cli&quot;,&quot;..\lib&quot;,&quot;..\externals\tinyxml&quot;,..\..\..\..\Qt\4.8.1\mkspecs\win32-msvc2008"
-				AdditionalOptions="-Zm200 -w34100 -w34189"
-				AssemblerListingLocation="temp\"
-				BufferSecurityCheck="false"
-				DebugInformationFormat="0"
-				ExceptionHandling="1"
-				GeneratePreprocessedFile="0"
-				ObjectFile="temp\"
-				Optimization ="2"
-				PreprocessorDefinitions="_CONSOLE,UNICODE,WIN32,QT_LARGEFILE_SUPPORT,_CRT_SECURE_NO_WARNINGS,NDEBUG"
-				ProgramDataBaseFileName=".\"
-				RuntimeLibrary="2"
-				RuntimeTypeInfo="true"
-				SuppressStartupBanner="true"
-				TreatWChar_tAsBuiltInType="false"
-				WarningLevel="4" />
+				Name="VCPreBuildEventTool"
+			/>
 			<Tool
-				Name="VCCustomBuildTool" />
+				Name="VCCustomBuildTool"
+			/>
 			<Tool
-				Name="VCLinkerTool"
-				AdditionalDependencies="shlwapi.lib"
-				AdditionalOptions="&quot;/MANIFESTDEPENDENCY:type=&apos;win32&apos; name=&apos;Microsoft.Windows.Common-Controls&apos; version=&apos;6.0.0.0&apos; publicKeyToken=&apos;6595b64144ccf1df&apos; language=&apos;*&apos; processorArchitecture=&apos;*&apos;&quot;"
-				GenerateDebugInformation="false"
-				IgnoreImportLibrary="true"
-				LinkIncremental="1"
-				LinkTimeCodeGeneration="0"
-				OutputFile="$(OutDir)\testrunner.exe"
-				ProgramDatabaseFile=""
-				SubSystem="1"
-				SuppressStartupBanner="true" />
+				Name="VCXMLDataGeneratorTool"
+			/>
+			<Tool
+				Name="VCWebServiceProxyGeneratorTool"
+			/>
 			<Tool
 				Name="VCMIDLTool"
+				WarningLevel="0"
 				DefaultCharType="0"
 				EnableErrorChecks="1"
-				WarningLevel="0" />
+			/>
 			<Tool
-				Name="VCPostBuildEventTool" />
+				Name="VCCLCompilerTool"
+				AdditionalOptions="-Zm200 -w34100 -w34189"
+				Optimization="2"
+				AdditionalIncludeDirectories="&quot;.&quot;,&quot;..\cli&quot;,&quot;..\lib&quot;,&quot;..\externals\tinyxml&quot;,..\..\..\..\Qt\4.8.1\mkspecs\win32-msvc2008"
+				PreprocessorDefinitions="_CONSOLE,UNICODE,WIN32,QT_LARGEFILE_SUPPORT,_CRT_SECURE_NO_WARNINGS,NDEBUG"
+				GeneratePreprocessedFile="0"
+				ExceptionHandling="1"
+				RuntimeLibrary="2"
+				BufferSecurityCheck="false"
+				TreatWChar_tAsBuiltInType="false"
+				RuntimeTypeInfo="true"
+				AssemblerListingLocation="temp\"
+				ObjectFile="temp\"
+				ProgramDataBaseFileName=".\"
+				WarningLevel="4"
+				SuppressStartupBanner="true"
+				DebugInformationFormat="0"
+			/>
 			<Tool
-				Name="VCPreBuildEventTool" />
-			<Tool
-				Name="VCPreLinkEventTool" />
+				Name="VCManagedResourceCompilerTool"
+			/>
 			<Tool
 				Name="VCResourceCompilerTool"
-				PreprocessorDefinitions="_CONSOLE,UNICODE,WIN32,QT_LARGEFILE_SUPPORT,_CRT_SECURE_NO_WARNINGS,NDEBUG" />
+				PreprocessorDefinitions="_CONSOLE,UNICODE,WIN32,QT_LARGEFILE_SUPPORT,_CRT_SECURE_NO_WARNINGS,NDEBUG"
+			/>
+			<Tool
+				Name="VCPreLinkEventTool"
+			/>
+			<Tool
+				Name="VCLinkerTool"
+				IgnoreImportLibrary="true"
+				AdditionalOptions="&quot;/MANIFESTDEPENDENCY:type=&apos;win32&apos; name=&apos;Microsoft.Windows.Common-Controls&apos; version=&apos;6.0.0.0&apos; publicKeyToken=&apos;6595b64144ccf1df&apos; language=&apos;*&apos; processorArchitecture=&apos;*&apos;&quot;"
+				AdditionalDependencies="shlwapi.lib"
+				OutputFile="$(OutDir)\testrunner.exe"
+				LinkIncremental="1"
+				SuppressStartupBanner="true"
+				GenerateDebugInformation="false"
+				ProgramDatabaseFile=""
+				SubSystem="1"
+				LinkTimeCodeGeneration="0"
+			/>
+			<Tool
+				Name="VCALinkTool"
+			/>
+			<Tool
+				Name="VCManifestTool"
+			/>
+			<Tool
+				Name="VCXDCMakeTool"
+			/>
+			<Tool
+				Name="VCBscMakeTool"
+			/>
+			<Tool
+				Name="VCFxCopTool"
+			/>
+			<Tool
+				Name="VCAppVerifierTool"
+			/>
+			<Tool
+				Name="VCPostBuildEventTool"
+			/>
 		</Configuration>
 	</Configurations>
+	<References>
+	</References>
 	<Files>
 		<Filter
 			Name="Source Files"
 			Filter="cpp;c;cxx;def;odl;idl;hpj;bat;asm;asmx"
-			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}">
-			<File
-				RelativePath="..\lib\check64bit.cpp" />
-			<File
-				RelativePath="..\lib\checkassignif.cpp" />
-			<File
-				RelativePath="..\lib\checkautovariables.cpp" />
-			<File
-				RelativePath="..\lib\checkboost.cpp" />
-			<File
-				RelativePath="..\lib\checkbufferoverrun.cpp" />
-			<File
-				RelativePath="..\lib\checkclass.cpp" />
-			<File
-				RelativePath="..\lib\checkexceptionsafety.cpp" />
-			<File
-				RelativePath="..\lib\checkinternal.cpp" />
-			<File
-				RelativePath="..\lib\checkio.cpp" />
-			<File
-				RelativePath="..\lib\checkleakautovar.cpp" />
-			<File
-				RelativePath="..\lib\checkmemoryleak.cpp" />
-			<File
-				RelativePath="..\lib\checknonreentrantfunctions.cpp" />
-			<File
-				RelativePath="..\lib\checknullpointer.cpp" />
-			<File
-				RelativePath="..\lib\checkobsoletefunctions.cpp" />
-			<File
-				RelativePath="..\lib\checkother.cpp" />
-			<File
-				RelativePath="..\lib\checkpostfixoperator.cpp" />
-			<File
-				RelativePath="..\lib\checkstl.cpp" />
-			<File
-				RelativePath="..\lib\checkuninitvar.cpp" />
-			<File
-				RelativePath="..\lib\checkunusedfunctions.cpp" />
-			<File
-				RelativePath="..\lib\checkunusedvar.cpp" />
-			<File
-				RelativePath="..\cli\cmdlineparser.cpp" />
-			<File
-				RelativePath="..\lib\cppcheck.cpp" />
-			<File
-				RelativePath="..\cli\cppcheckexecutor.cpp" />
-			<File
-				RelativePath="..\lib\errorlogger.cpp" />
-			<File
-				RelativePath="..\lib\executionpath.cpp" />
-			<File
-				RelativePath="..\cli\filelister.cpp" />
-			<File
-				RelativePath="..\lib\mathlib.cpp" />
-			<File
-				RelativePath="options.cpp" />
-			<File
-				RelativePath="..\lib\path.cpp" />
-			<File
-				RelativePath="..\cli\pathmatch.cpp" />
-			<File
-				RelativePath="..\lib\preprocessor.cpp" />
-			<File
-				RelativePath="..\lib\settings.cpp" />
-			<File
-				RelativePath="..\lib\suppressions.cpp" />
-			<File
-				RelativePath="..\lib\symboldatabase.cpp" />
-			<File
-				RelativePath="..\lib\templatesimplifier.cpp" />
-			<File
-				RelativePath="test64bit.cpp" />
-			<File
-				RelativePath="testassignif.cpp" />
-			<File
-				RelativePath="testautovariables.cpp" />
-			<File
-				RelativePath="testboost.cpp" />
-			<File
-				RelativePath="testbufferoverrun.cpp" />
-			<File
-				RelativePath="testcharvar.cpp" />
-			<File
-				RelativePath="testclass.cpp" />
-			<File
-				RelativePath="testcmdlineparser.cpp" />
-			<File
-				RelativePath="testconstructors.cpp" />
-			<File
-				RelativePath="testcppcheck.cpp" />
-			<File
-				RelativePath="testdivision.cpp" />
-			<File
-				RelativePath="testerrorlogger.cpp" />
-			<File
-				RelativePath="testexceptionsafety.cpp" />
-			<File
-				RelativePath="testfilelister.cpp" />
-			<File
-				RelativePath="testincompletestatement.cpp" />
-			<File
-				RelativePath="testinternal.cpp" />
-			<File
-				RelativePath="testio.cpp" />
-			<File
-				RelativePath="testleakautovar.cpp" />
-			<File
-				RelativePath="testmathlib.cpp" />
-			<File
-				RelativePath="testmemleak.cpp" />
-			<File
-				RelativePath="testnonreentrantfunctions.cpp" />
-			<File
-				RelativePath="testnullpointer.cpp" />
-			<File
-				RelativePath="testobsoletefunctions.cpp" />
-			<File
-				RelativePath="testoptions.cpp" />
-			<File
-				RelativePath="testother.cpp" />
-			<File
-				RelativePath="testpath.cpp" />
-			<File
-				RelativePath="testpathmatch.cpp" />
-			<File
-				RelativePath="testpostfixoperator.cpp" />
-			<File
-				RelativePath="testpreprocessor.cpp" />
-			<File
-				RelativePath="testrunner.cpp" />
-			<File
-				RelativePath="testsimplifytokens.cpp" />
-			<File
-				RelativePath="teststl.cpp" />
-			<File
-				RelativePath="testsuite.cpp" />
-			<File
-				RelativePath="testsuppressions.cpp" />
-			<File
-				RelativePath="testsymboldatabase.cpp" />
-			<File
-				RelativePath="testthreadexecutor.cpp" />
-			<File
-				RelativePath="testtimer.cpp" />
-			<File
-				RelativePath="testtoken.cpp" />
-			<File
-				RelativePath="testtokenize.cpp" />
-			<File
-				RelativePath="testuninitvar.cpp" />
-			<File
-				RelativePath="testunusedfunctions.cpp" />
-			<File
-				RelativePath="testunusedprivfunc.cpp" />
-			<File
-				RelativePath="testunusedvar.cpp" />
-			<File
-				RelativePath="..\cli\threadexecutor.cpp" />
-			<File
-				RelativePath="..\lib\timer.cpp" />
-			<File
-				RelativePath="..\externals\tinyxml\tinystr.cpp" />
-			<File
-				RelativePath="..\externals\tinyxml\tinyxml.cpp" />
-			<File
-				RelativePath="..\externals\tinyxml\tinyxmlerror.cpp" />
-			<File
-				RelativePath="..\externals\tinyxml\tinyxmlparser.cpp" />
-			<File
-				RelativePath="..\lib\token.cpp" />
-			<File
-				RelativePath="..\lib\tokenize.cpp" />
-			<File
-				RelativePath="..\lib\tokenlist.cpp" />
+			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}"
+			>
+			<File
+				RelativePath="..\lib\check64bit.cpp"
+				>
+				<FileConfiguration
+					Name="Debug|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="..\lib\checkassignif.cpp"
+				>
+				<FileConfiguration
+					Name="Debug|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="..\lib\checkautovariables.cpp"
+				>
+				<FileConfiguration
+					Name="Debug|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="..\lib\checkboost.cpp"
+				>
+				<FileConfiguration
+					Name="Debug|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="..\lib\checkbufferoverrun.cpp"
+				>
+				<FileConfiguration
+					Name="Debug|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="..\lib\checkclass.cpp"
+				>
+				<FileConfiguration
+					Name="Debug|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="..\lib\checkexceptionsafety.cpp"
+				>
+				<FileConfiguration
+					Name="Debug|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="..\lib\checkinternal.cpp"
+				>
+				<FileConfiguration
+					Name="Debug|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="..\lib\checkio.cpp"
+				>
+				<FileConfiguration
+					Name="Debug|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="..\lib\checkleakautovar.cpp"
+				>
+				<FileConfiguration
+					Name="Debug|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="..\lib\checkmemoryleak.cpp"
+				>
+				<FileConfiguration
+					Name="Debug|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="..\lib\checknonreentrantfunctions.cpp"
+				>
+				<FileConfiguration
+					Name="Debug|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="..\lib\checknullpointer.cpp"
+				>
+				<FileConfiguration
+					Name="Debug|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="..\lib\checkobsoletefunctions.cpp"
+				>
+				<FileConfiguration
+					Name="Debug|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="..\lib\checkother.cpp"
+				>
+				<FileConfiguration
+					Name="Debug|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="..\lib\checkpostfixoperator.cpp"
+				>
+				<FileConfiguration
+					Name="Debug|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="..\lib\checkstl.cpp"
+				>
+				<FileConfiguration
+					Name="Debug|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="..\lib\checkuninitvar.cpp"
+				>
+				<FileConfiguration
+					Name="Debug|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="..\lib\checkunusedfunctions.cpp"
+				>
+				<FileConfiguration
+					Name="Debug|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="..\lib\checkunusedincludes.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\lib\checkunusedvar.cpp"
+				>
+				<FileConfiguration
+					Name="Debug|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="..\cli\cmdlineparser.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\lib\cppcheck.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\cli\cppcheckexecutor.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\lib\errorlogger.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\lib\executionpath.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\cli\filelister.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\lib\mathlib.cpp"
+				>
+			</File>
+			<File
+				RelativePath="options.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\lib\path.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\cli\pathmatch.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\lib\preprocessor.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\lib\settings.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\lib\suppressions.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\lib\symboldatabase.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\lib\templatesimplifier.cpp"
+				>
+			</File>
+			<File
+				RelativePath="test64bit.cpp"
+				>
+				<FileConfiguration
+					Name="Debug|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="testassignif.cpp"
+				>
+				<FileConfiguration
+					Name="Debug|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="testautovariables.cpp"
+				>
+				<FileConfiguration
+					Name="Debug|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="testboost.cpp"
+				>
+				<FileConfiguration
+					Name="Debug|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="testbufferoverrun.cpp"
+				>
+				<FileConfiguration
+					Name="Debug|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="testcharvar.cpp"
+				>
+				<FileConfiguration
+					Name="Debug|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="testclass.cpp"
+				>
+				<FileConfiguration
+					Name="Debug|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="testcmdlineparser.cpp"
+				>
+				<FileConfiguration
+					Name="Debug|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="testconstructors.cpp"
+				>
+				<FileConfiguration
+					Name="Debug|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="testcppcheck.cpp"
+				>
+				<FileConfiguration
+					Name="Debug|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="testdivision.cpp"
+				>
+				<FileConfiguration
+					Name="Debug|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="testerrorlogger.cpp"
+				>
+				<FileConfiguration
+					Name="Debug|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="testexceptionsafety.cpp"
+				>
+				<FileConfiguration
+					Name="Debug|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="testfilelister.cpp"
+				>
+				<FileConfiguration
+					Name="Debug|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="testincompletestatement.cpp"
+				>
+				<FileConfiguration
+					Name="Debug|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="testinternal.cpp"
+				>
+				<FileConfiguration
+					Name="Debug|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="testio.cpp"
+				>
+				<FileConfiguration
+					Name="Debug|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="testleakautovar.cpp"
+				>
+				<FileConfiguration
+					Name="Debug|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="testmathlib.cpp"
+				>
+				<FileConfiguration
+					Name="Debug|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="testmemleak.cpp"
+				>
+				<FileConfiguration
+					Name="Debug|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="testnonreentrantfunctions.cpp"
+				>
+				<FileConfiguration
+					Name="Debug|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="testnullpointer.cpp"
+				>
+				<FileConfiguration
+					Name="Debug|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="testobsoletefunctions.cpp"
+				>
+				<FileConfiguration
+					Name="Debug|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="testoptions.cpp"
+				>
+				<FileConfiguration
+					Name="Debug|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="testother.cpp"
+				>
+				<FileConfiguration
+					Name="Debug|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="testpath.cpp"
+				>
+				<FileConfiguration
+					Name="Debug|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="testpathmatch.cpp"
+				>
+				<FileConfiguration
+					Name="Debug|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="testpostfixoperator.cpp"
+				>
+				<FileConfiguration
+					Name="Debug|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="testpreprocessor.cpp"
+				>
+				<FileConfiguration
+					Name="Debug|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="testrunner.cpp"
+				>
+			</File>
+			<File
+				RelativePath="testsimplifytokens.cpp"
+				>
+				<FileConfiguration
+					Name="Debug|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="teststl.cpp"
+				>
+				<FileConfiguration
+					Name="Debug|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="testsuite.cpp"
+				>
+			</File>
+			<File
+				RelativePath="testsuppressions.cpp"
+				>
+				<FileConfiguration
+					Name="Debug|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="testsymboldatabase.cpp"
+				>
+				<FileConfiguration
+					Name="Debug|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="testthreadexecutor.cpp"
+				>
+				<FileConfiguration
+					Name="Debug|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="testtimer.cpp"
+				>
+				<FileConfiguration
+					Name="Debug|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="testtoken.cpp"
+				>
+				<FileConfiguration
+					Name="Debug|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="testtokenize.cpp"
+				>
+				<FileConfiguration
+					Name="Debug|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="testuninitvar.cpp"
+				>
+				<FileConfiguration
+					Name="Debug|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="testunusedfunctions.cpp"
+				>
+				<FileConfiguration
+					Name="Debug|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath=".\testunusedincludes.cpp"
+				>
+			</File>
+			<File
+				RelativePath="testunusedprivfunc.cpp"
+				>
+				<FileConfiguration
+					Name="Debug|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="testunusedvar.cpp"
+				>
+				<FileConfiguration
+					Name="Debug|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="..\cli\threadexecutor.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\lib\timer.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\externals\tinyxml\tinystr.cpp"
+				>
+				<FileConfiguration
+					Name="Debug|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="..\externals\tinyxml\tinyxml.cpp"
+				>
+				<FileConfiguration
+					Name="Debug|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="..\externals\tinyxml\tinyxmlerror.cpp"
+				>
+				<FileConfiguration
+					Name="Debug|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="..\externals\tinyxml\tinyxmlparser.cpp"
+				>
+				<FileConfiguration
+					Name="Debug|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="..\lib\token.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\lib\tokenize.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\lib\tokenlist.cpp"
+				>
+			</File>
 		</Filter>
 		<Filter
 			Name="Header Files"
 			Filter="h;hpp;hxx;hm;inl;inc;xsd"
-			UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}">
+			UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}"
+			>
 			<File
-				RelativePath="..\lib\check.h" />
+				RelativePath="..\lib\check.h"
+				>
+			</File>
 			<File
-				RelativePath="..\lib\check64bit.h" />
+				RelativePath="..\lib\check64bit.h"
+				>
+			</File>
 			<File
-				RelativePath="..\lib\checkassignif.h" />
+				RelativePath="..\lib\checkassignif.h"
+				>
+			</File>
 			<File
-				RelativePath="..\lib\checkautovariables.h" />
+				RelativePath="..\lib\checkautovariables.h"
+				>
+			</File>
 			<File
-				RelativePath="..\lib\checkboost.h" />
+				RelativePath="..\lib\checkboost.h"
+				>
+			</File>
 			<File
-				RelativePath="..\lib\checkbufferoverrun.h" />
+				RelativePath="..\lib\checkbufferoverrun.h"
+				>
+			</File>
 			<File
-				RelativePath="..\lib\checkclass.h" />
+				RelativePath="..\lib\checkclass.h"
+				>
+			</File>
 			<File
-				RelativePath="..\lib\checkexceptionsafety.h" />
+				RelativePath="..\lib\checkexceptionsafety.h"
+				>
+			</File>
 			<File
-				RelativePath="..\lib\checkinternal.h" />
+				RelativePath="..\lib\checkinternal.h"
+				>
+			</File>
 			<File
-				RelativePath="..\lib\checkio.h" />
+				RelativePath="..\lib\checkio.h"
+				>
+			</File>
 			<File
-				RelativePath="..\lib\checkleakautovar.h" />
+				RelativePath="..\lib\checkleakautovar.h"
+				>
+			</File>
 			<File
-				RelativePath="..\lib\checkmemoryleak.h" />
+				RelativePath="..\lib\checkmemoryleak.h"
+				>
+			</File>
 			<File
-				RelativePath="..\lib\checknonreentrantfunctions.h" />
+				RelativePath="..\lib\checknonreentrantfunctions.h"
+				>
+			</File>
 			<File
-				RelativePath="..\lib\checknullpointer.h" />
+				RelativePath="..\lib\checknullpointer.h"
+				>
+			</File>
 			<File
-				RelativePath="..\lib\checkobsoletefunctions.h" />
+				RelativePath="..\lib\checkobsoletefunctions.h"
+				>
+			</File>
 			<File
-				RelativePath="..\lib\checkother.h" />
+				RelativePath="..\lib\checkother.h"
+				>
+			</File>
 			<File
-				RelativePath="..\lib\checkpostfixoperator.h" />
+				RelativePath="..\lib\checkpostfixoperator.h"
+				>
+			</File>
 			<File
-				RelativePath="..\lib\checkstl.h" />
+				RelativePath="..\lib\checkstl.h"
+				>
+			</File>
 			<File
-				RelativePath="..\lib\checkuninitvar.h" />
+				RelativePath="..\lib\checkuninitvar.h"
+				>
+			</File>
 			<File
-				RelativePath="..\lib\checkunusedfunctions.h" />
+				RelativePath="..\lib\checkunusedfunctions.h"
+				>
+			</File>
 			<File
-				RelativePath="..\lib\checkunusedvar.h" />
+				RelativePath="..\lib\checkunusedincludes.h"
+				>
+			</File>
 			<File
-				RelativePath="..\cli\cmdlineparser.h" />
+				RelativePath="..\lib\checkunusedvar.h"
+				>
+			</File>
 			<File
-				RelativePath="..\lib\cppcheck.h" />
+				RelativePath="..\cli\cmdlineparser.h"
+				>
+			</File>
 			<File
-				RelativePath="..\cli\cppcheckexecutor.h" />
+				RelativePath="..\lib\cppcheck.h"
+				>
+			</File>
 			<File
-				RelativePath="..\lib\errorlogger.h" />
+				RelativePath="..\cli\cppcheckexecutor.h"
+				>
+			</File>
 			<File
-				RelativePath="..\lib\executionpath.h" />
+				RelativePath="..\lib\errorlogger.h"
+				>
+			</File>
 			<File
-				RelativePath="..\cli\filelister.h" />
+				RelativePath="..\lib\executionpath.h"
+				>
+			</File>
 			<File
-				RelativePath="..\lib\mathlib.h" />
+				RelativePath="..\cli\filelister.h"
+				>
+			</File>
 			<File
-				RelativePath="options.h" />
+				RelativePath="..\lib\mathlib.h"
+				>
+			</File>
 			<File
-				RelativePath="..\lib\path.h" />
+				RelativePath="options.h"
+				>
+			</File>
 			<File
-				RelativePath="..\cli\pathmatch.h" />
+				RelativePath="..\lib\path.h"
+				>
+			</File>
 			<File
-				RelativePath="..\lib\preprocessor.h" />
+				RelativePath="..\cli\pathmatch.h"
+				>
+			</File>
 			<File
-				RelativePath="redirect.h" />
+				RelativePath="..\lib\preprocessor.h"
+				>
+			</File>
 			<File
-				RelativePath="..\lib\settings.h" />
+				RelativePath="redirect.h"
+				>
+			</File>
 			<File
-				RelativePath="..\lib\suppressions.h" />
+				RelativePath="..\lib\settings.h"
+				>
+			</File>
 			<File
-				RelativePath="..\lib\symboldatabase.h" />
+				RelativePath="..\lib\suppressions.h"
+				>
+			</File>
 			<File
-				RelativePath="..\lib\templatesimplifier.h" />
+				RelativePath="..\lib\symboldatabase.h"
+				>
+			</File>
 			<File
-				RelativePath="testsuite.h" />
+				RelativePath="..\lib\templatesimplifier.h"
+				>
+			</File>
 			<File
-				RelativePath="..\cli\threadexecutor.h" />
+				RelativePath="testsuite.h"
+				>
+			</File>
 			<File
-				RelativePath="..\lib\timer.h" />
+				RelativePath="..\cli\threadexecutor.h"
+				>
+			</File>
 			<File
-				RelativePath="..\externals\tinyxml\tinystr.h" />
+				RelativePath="..\lib\timer.h"
+				>
+			</File>
 			<File
-				RelativePath="..\externals\tinyxml\tinyxml.h" />
+				RelativePath="..\externals\tinyxml\tinystr.h"
+				>
+			</File>
 			<File
-				RelativePath="..\lib\token.h" />
+				RelativePath="..\externals\tinyxml\tinyxml.h"
+				>
+			</File>
 			<File
-				RelativePath="..\lib\tokenize.h" />
+				RelativePath="..\lib\token.h"
+				>
+			</File>
 			<File
-				RelativePath="..\lib\tokenlist.h" />
+				RelativePath="..\lib\tokenize.h"
+				>
+			</File>
+			<File
+				RelativePath="..\lib\tokenlist.h"
+				>
+			</File>
 		</Filter>
 	</Files>
 	<Globals>

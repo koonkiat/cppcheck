@@ -36,7 +36,9 @@ private:
     void run() {
 
 		TEST_CASE(matchType);
-		TEST_CASE(matchIncludes);
+        TEST_CASE(matchIncludes);
+        TEST_CASE(parseIncludesAngle);
+        TEST_CASE(parseIncludesQuotes);
     }
 
     void check(const char code[]) {
@@ -80,6 +82,38 @@ private:
 			std::string includeName = tok->strAt(2);
 			ASSERT_EQUALS("abc", includeName.c_str());
 		}
+    }
+    void parseIncludesAngle() {
+        Settings settings;
+        settings.addEnabled("style");
+
+        // Tokenize..
+        Tokenizer tokenizer(&settings, this);
+        std::istringstream istr("#define SOMETHING \n#include <abc.h>;\n#include <xyz>;");
+        tokenizer.tokenize(istr, "test.cpp");
+
+        CheckUnusedIncludes CheckUnusedIncludes(&tokenizer, &settings, this);
+        CheckUnusedIncludes.parseTokens(tokenizer);
+        ASSERT_EQUALS(2, CheckUnusedIncludes.GetIncludeMap().size());
+        const CheckUnusedIncludes::IncludeMap& includeMap = CheckUnusedIncludes.GetIncludeMap();
+        ASSERT_EQUALS(true, includeMap.find("abc.h") != includeMap.end());
+        ASSERT_EQUALS(true, includeMap.find("xyz") != includeMap.end());
+    }
+    void parseIncludesQuotes() {
+        Settings settings;
+        settings.addEnabled("style");
+
+        // Tokenize..
+        Tokenizer tokenizer(&settings, this);
+        std::istringstream istr("#define SOMETHING \n#include \"abc.h\";\n#include \"xyz.hpp\";");
+        tokenizer.tokenize(istr, "test.cpp");
+
+        CheckUnusedIncludes CheckUnusedIncludes(&tokenizer, &settings, this);
+        CheckUnusedIncludes.parseTokens(tokenizer);
+        ASSERT_EQUALS(2, CheckUnusedIncludes.GetIncludeMap().size());
+        const CheckUnusedIncludes::IncludeMap& includeMap = CheckUnusedIncludes.GetIncludeMap();
+        ASSERT_EQUALS(true, includeMap.find("abc.h") != includeMap.end());
+        ASSERT_EQUALS(true, includeMap.find("xyz.hpp") != includeMap.end());
     }
 };
 

@@ -39,7 +39,31 @@ void CheckUnusedIncludes::parseTokens(const Tokenizer &tokenizer)
 }
 void CheckUnusedIncludes::parseTokensForIncludes(const Tokenizer &tokenizer)
 {
-	tokenizer;
+    for (const Token *tok = tokenizer.tokens(); tok; tok = tok->next()) {
+        if (tok->fileIndex() != 0)
+            continue;
+        if(Token::Match(tok, "#include"))
+        {
+            std::string includeName("");
+            if (Token::Match(tok, "#include %str%")) {
+                std::string str = tok->strAt(1);
+                includeName = str.substr(1, str.size() - 2);
+            }
+            else {
+                includeName = tok->strAt(2);
+
+                tok = tok->tokAt(3);
+                // concat extension if available
+                if (tok->str() == ".")
+                {
+                    includeName = includeName + "." + tok->strAt(1);
+                }
+            }
+
+            IncludeUsage &incl = _includes[ includeName ];
+            incl.filename = tokenizer.getSourceFilePath();
+        }
+    }
 }
 void CheckUnusedIncludes::parseTokensForDeclaredTypes(const Tokenizer &tokenizer)
 {
