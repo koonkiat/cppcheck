@@ -54,7 +54,9 @@ void CheckUnusedIncludes::parseTokensForIncludes(const Tokenizer &tokenizer)
             }
 
             IncludeUsage &incl = _includes[ includeName ];
-            incl.filename = tokenizer.getSourceFilePath();
+            incl.filename = includeName;
+
+			incl.dependencyList.push_back(tokenizer.getSourceFilePath());
         }
     }
 }
@@ -180,7 +182,7 @@ void CheckUnusedIncludes::parseTokensForRequiredTypes(const Tokenizer &tokenizer
 
 void CheckUnusedIncludes::check(ErrorLogger * const errorLogger)
 {
-    for (std::map<std::string, IncludeUsage>::const_iterator it = _includes.begin(); it != _includes.end(); ++it) {
+    for (IncludeMap::const_iterator it = _includes.begin(); it != _includes.end(); ++it) {
         const IncludeUsage &func = it->second;
         if (func.usedOtherFile || func.filename.empty())
             continue;
@@ -225,4 +227,14 @@ void CheckUnusedIncludes::unusedIncludeError(ErrorLogger * const errorLogger,
         errorLogger->reportErr(errmsg);
     else
         reportError(errmsg);
+}
+void CheckUnusedIncludes::GetIncludeDependencies(std::string & out_String)
+{
+    for (IncludeMap::const_iterator it = _includes.begin(); it != _includes.end(); ++it) {
+        const IncludeUsage &incl = it->second;
+		out_String.append(incl.filename + ":\n");
+		for (std::list<std::string>::const_iterator str_it = incl.dependencyList.begin(); str_it != incl.dependencyList.end(); ++str_it) {
+			out_String.append("\t" + *str_it + "\n");
+		}
+	}
 }

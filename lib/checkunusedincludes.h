@@ -63,8 +63,9 @@ public:
         std::list<std::string> dependencyList;
     };
     typedef std::map<std::string, IncludeUsage> IncludeMap;
-    const IncludeMap& GetIncludeMap() { return _includes; }
 
+    const IncludeMap& GetIncludeMap() { return _includes; }
+	void GetIncludeDependencies(std::string & out_String);
 private:
 
     void getErrorMessages(ErrorLogger *errorLogger, const Settings *settings) const {

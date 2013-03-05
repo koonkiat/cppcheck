@@ -46,6 +46,9 @@ private:
 
         TEST_CASE(parseIncludesAngle);
         TEST_CASE(parseIncludesQuotes);
+
+        TEST_CASE(dependency_multipleFiles);
+
     }
 
     void check(const char code[]) {
@@ -178,6 +181,41 @@ private:
 
         ASSERT_EQUALS(file1h.filename.str(), it1->second.filename);
         ASSERT_EQUALS(file1cpp.filename.str(), it2->second.filename);
+    }
+	
+    void dependency_multipleFiles() {
+		CheckUnusedIncludes c;
+
+        // Clear the error buffer..
+        errout.str("");
+
+		FileCodePair file1h("file1.h", "#include <stdio>;");
+		FileCodePair file1cpp("file1.cpp", "#include \"file1.h\";");
+		FileCodePair file2h("file2.h", "#include \"file1.h\";");
+		FileCodePair file2cpp("file2.cpp", "#include \"file2.h\"; \n \
+										    #include \"file1.h\";");
+		
+		const FileCodePair* arr[] = {&file1h, &file1cpp, &file2h, &file2cpp};
+		
+        for (int i = 0; i < 4; ++i) {
+            // Clear the error buffer..
+            errout.str("");
+            Settings settings;
+            Tokenizer tokenizer(&settings, this);
+
+            std::istringstream istr(arr[i]->code);
+            tokenizer.tokenize(istr, arr[i]->filename.str().c_str());
+
+            c.parseTokens(tokenizer);
+        }
+
+        // Check for unused functions..
+        c.check(this);
+		
+        //const CheckUnusedIncludes::IncludeMap& includeMap = c.GetIncludeMap();
+		std::string dependencies;
+		c.GetIncludeDependencies(dependencies);
+		ASSERT_EQUALS("file1.h:\n\tfile1.cpp\n\tfile2.h\n\tfile2.cpp\nfile2.h:\n\tfile2.cpp\n", dependencies);
     }
 };
 
