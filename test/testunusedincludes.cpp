@@ -117,7 +117,7 @@ private:
 
         CheckUnusedIncludes CheckUnusedIncludes(&tokenizer, &settings, this);
         CheckUnusedIncludes.parseTokens(tokenizer);
-        ASSERT_EQUALS(2, CheckUnusedIncludes.GetIncludeMap().size());
+        ASSERT_EQUALS(0, CheckUnusedIncludes.GetIncludeMap().size());
         const CheckUnusedIncludes::IncludeMap& includeMap = CheckUnusedIncludes.GetIncludeMap();
         ASSERT_EQUALS(false, includeMap.find("abc.h") != includeMap.end());
         ASSERT_EQUALS(false, includeMap.find("xyz") != includeMap.end());

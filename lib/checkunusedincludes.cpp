@@ -50,14 +50,7 @@ void CheckUnusedIncludes::parseTokensForIncludes(const Tokenizer &tokenizer)
                 includeName = str.substr(1, str.size() - 2);
             }
             else {
-                includeName = tok->strAt(2);
-
-                tok = tok->tokAt(3);
-                // concat extension if available
-                if (tok->str() == ".")
-                {
-                    includeName = includeName + "." + tok->strAt(1);
-                }
+                continue;
             }
 
             IncludeUsage &incl = _includes[ includeName ];
