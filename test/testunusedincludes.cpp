@@ -119,8 +119,8 @@ private:
         CheckUnusedIncludes.parseTokens(tokenizer);
         ASSERT_EQUALS(2, CheckUnusedIncludes.GetIncludeMap().size());
         const CheckUnusedIncludes::IncludeMap& includeMap = CheckUnusedIncludes.GetIncludeMap();
-        ASSERT_EQUALS(true, includeMap.find("abc.h") != includeMap.end());
-        ASSERT_EQUALS(true, includeMap.find("xyz") != includeMap.end());
+        ASSERT_EQUALS(false, includeMap.find("abc.h") != includeMap.end());
+        ASSERT_EQUALS(false, includeMap.find("xyz") != includeMap.end());
     }
     void parseIncludesQuotes() {
         Settings settings;
