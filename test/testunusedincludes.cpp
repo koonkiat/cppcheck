@@ -41,8 +41,9 @@ private:
 		TEST_CASE(accept_file);
 
 
-		TEST_CASE(matchType);
-        TEST_CASE(matchIncludes);
+		TEST_CASE(understanding_MatchType);
+        TEST_CASE(understanding_MatchIncludes);
+
         TEST_CASE(parseIncludesAngle);
         TEST_CASE(parseIncludesQuotes);
     }
@@ -82,7 +83,7 @@ private:
         ASSERT_EQUALS(true, Path::acceptFile("index.hpp"));
     }
 	
-    void matchType() {
+    void understanding_MatchType() {
 		{
 			givenACodeSampleToTokenize enumIsType("enum myEnum{ a,b };", true);
 			ASSERT_EQUALS(true, Token::Match(enumIsType.tokens(), "%type%"));
@@ -92,7 +93,7 @@ private:
 			ASSERT_EQUALS(true, Token::Match(classIsType2.tokens(), "%type% %var%"));
 		}
     }
-    void matchIncludes() {
+    void understanding_MatchIncludes() {
 		{
 			givenACodeSampleToTokenize include_angle("#define SOMETHING \n#include <abc.h>;");
 			// std::cout << include_angle.tokens()->stringifyList(true, true, true,true,true) << std::endl; 
@@ -164,10 +165,19 @@ private:
         // Check for unused functions..
         c.check(this);
 		
-        ASSERT_EQUALS(2, c.GetIncludeMap().size());
+        
         const CheckUnusedIncludes::IncludeMap& includeMap = c.GetIncludeMap();
-        ASSERT_EQUALS(true, includeMap.find("stdio") != includeMap.end());
-        ASSERT_EQUALS(true, includeMap.find("file1.h") != includeMap.end());
+        
+        ASSERT_EQUALS(2, includeMap.size());
+
+        CheckUnusedIncludes::IncludeMap::const_iterator it1 = includeMap.find("stdio");
+        CheckUnusedIncludes::IncludeMap::const_iterator it2 = includeMap.find("file1.h");
+
+        ASSERT_EQUALS(true, it1 != includeMap.end());
+        ASSERT_EQUALS(true, it2 != includeMap.end());
+
+        ASSERT_EQUALS(file1h.filename.str(), it1->second.filename);
+        ASSERT_EQUALS(file1cpp.filename.str(), it2->second.filename);
     }
 };
 
