@@ -227,14 +227,18 @@ unsigned int CppCheck::processFile(const std::string& filename)
 void CppCheck::checkFunctionUsage()
 {
     // This generates false positives - especially for libraries
-    if (_settings.isEnabled("unusedFunction") && _settings._jobs == 1) {
+    if (/*_settings.isEnabled("unusedFunction") &&*/ _settings._jobs == 1) {
         const bool verbose_orig = _settings._verbose;
         _settings._verbose = false;
 
         if (_settings._errorsOnly == false)
             _errorLogger.reportOut("Checking usage of global functions..");
 
-        _checkUnusedFunctions.check(this);
+        _checkUnusedIncludes.check(this);
+
+		std::string outstr;
+		_checkUnusedIncludes.GetIncludeDependencies(outstr);
+		std::cout << std::endl << outstr << std::endl;
 
         _settings._verbose = verbose_orig;
     }
@@ -312,8 +316,8 @@ void CppCheck::checkFile(const std::string &code, const char FileName[])
             (*it)->runChecks(&_tokenizer, &_settings, this);
         }
 
-        if (_settings.isEnabled("unusedFunction") && _settings._jobs == 1)
-            _checkUnusedFunctions.parseTokens(_tokenizer);
+        if (/*_settings.isEnabled("unusedFunction") &&*/ _settings._jobs == 1)
+            _checkUnusedIncludes.parseTokens(_tokenizer);
 
         Timer timer3("Tokenizer::simplifyTokenList", _settings._showtime, &S_timerResults);
         result = _tokenizer.simplifyTokenList();

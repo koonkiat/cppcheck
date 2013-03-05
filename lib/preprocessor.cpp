@@ -901,13 +901,15 @@ void Preprocessor::preprocess(std::istream &srcCodeStream, std::string &processe
                 pos1++;
         }
 
-        processedFile = handleIncludes(processedFile, filename, includePaths, defs);
+		//HACK
+		includePaths;
+        //processedFile = handleIncludes(processedFile, filename, includePaths, defs);
         if (_settings->userIncludes.empty())
             resultConfigurations = getcfgs(processedFile, filename);
 
     } else {
-
-        handleIncludes(processedFile, filename, includePaths);
+		//HACK
+        //handleIncludes(processedFile, filename, includePaths);
 
         processedFile = replaceIfDefined(processedFile);
 
@@ -1826,7 +1828,9 @@ std::string Preprocessor::getcode(const std::string &filedata, const std::string
             // Remove #if, #else, #pragma etc, leaving only
             // #define, #undef, #file and #endfile. and also lines
             // which are not part of this configuration.
-            line = "";
+			//HACK
+			if(line.compare(0, 8, "#include") != 0)
+				line = "";
         }
 
         ret << line << "\n";
@@ -1943,7 +1947,7 @@ std::string Preprocessor::handleIncludes(const std::string &code, const std::str
         return "";
 
     std::ostringstream ostr;
-    std::istringstream istr(code);
+	std::istringstream istr(code);
     std::string line;
     bool suppressCurrentCodePath = false;
     while (std::getline(istr,line)) {

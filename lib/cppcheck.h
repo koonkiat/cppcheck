@@ -22,7 +22,7 @@
 #include "config.h"
 #include "settings.h"
 #include "errorlogger.h"
-#include "checkunusedfunctions.h"
+#include "checkunusedincludes.h"
 
 #include <string>
 #include <list>
@@ -182,7 +182,7 @@ private:
      */
     virtual void reportInfo(const ErrorLogger::ErrorMessage &msg);
 
-    CheckUnusedFunctions _checkUnusedFunctions;
+    CheckUnusedIncludes _checkUnusedIncludes;
     ErrorLogger &_errorLogger;
 
     /** @brief Current preprocessor configuration */
