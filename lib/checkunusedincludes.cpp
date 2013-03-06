@@ -22,6 +22,7 @@
 #include "tokenize.h"
 #include "token.h"
 #include <cctype>
+#include <sstream>
 //---------------------------------------------------------------------------
 
 
@@ -78,7 +79,8 @@ void CheckUnusedIncludes::parseTokensForDeclaredTypes(const Tokenizer &tokenizer
 }
 void CheckUnusedIncludes::parseTokensForRequiredTypes(const Tokenizer &tokenizer)
 {
-    // Function declarations..
+    tokenizer;
+    /*// Function declarations..
     for (const Token *tok = tokenizer.tokens(); tok; tok = tok->next()) {
         if (tok->fileIndex() != 0)
             continue;
@@ -186,7 +188,7 @@ void CheckUnusedIncludes::parseTokensForRequiredTypes(const Tokenizer &tokenizer
             else
                 func.usedSameFile = true;
         }
-    }
+    }*/
 }
 
 
@@ -244,7 +246,10 @@ void CheckUnusedIncludes::GetIncludeDependencies(std::string & out_String)
 {
     for (IncludeMap::const_iterator it = _includes.begin(); it != _includes.end(); ++it) {
         const IncludeUsage &incl = it->second;
-		out_String.append(incl.filename + ":\n");
+        std::ostringstream ss;
+        ss << incl.filename << " (" << incl.dependencyList.size() << ") :\n";
+        out_String.append(ss.str());
+        //out_String.append(incl.filename + "("+std::to_string(incl.dependencyList.size())+")"+":\n");
 		for (std::list<std::string>::const_iterator str_it = incl.dependencyList.begin(); str_it != incl.dependencyList.end(); ++str_it) {
 			out_String.append("\t" + *str_it + "\n");
 		}

@@ -280,6 +280,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\lib\checkunusedincludes.cpp"
+				>
+			</File>
+			<File
 				RelativePath="..\lib\checkunusedvar.cpp"
 				>
 			</File>
@@ -495,6 +499,10 @@
 			</File>
 			<File
 				RelativePath="..\lib\checkunusedfunctions.h"
+				>
+			</File>
+			<File
+				RelativePath="..\lib\checkunusedincludes.h"
 				>
 			</File>
 			<File
