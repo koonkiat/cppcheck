@@ -182,6 +182,7 @@ private:
      */
     virtual void reportInfo(const ErrorLogger::ErrorMessage &msg);
 
+    //HACK
     CheckUnusedIncludes _checkUnusedIncludes;
     ErrorLogger &_errorLogger;
 
