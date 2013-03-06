@@ -46,6 +46,7 @@ private:
 
         TEST_CASE(parseIncludesAngle);
         TEST_CASE(parseIncludesQuotes);
+        TEST_CASE(parseIncludesWithPath);
 
         TEST_CASE(dependency_multipleFiles);
 
@@ -132,6 +133,22 @@ private:
         // Tokenize..
         Tokenizer tokenizer(&settings, this);
         std::istringstream istr("#define SOMETHING \n#include \"abc.h\";\n#include \"xyz.hpp\";");
+        tokenizer.tokenize(istr, "test.cpp");
+
+        CheckUnusedIncludes CheckUnusedIncludes(&tokenizer, &settings, this);
+        CheckUnusedIncludes.parseTokens(tokenizer);
+        ASSERT_EQUALS(2, CheckUnusedIncludes.GetIncludeMap().size());
+        const CheckUnusedIncludes::IncludeMap& includeMap = CheckUnusedIncludes.GetIncludeMap();
+        ASSERT_EQUALS(true, includeMap.find("abc.h") != includeMap.end());
+        ASSERT_EQUALS(true, includeMap.find("xyz.hpp") != includeMap.end());
+    }
+    void parseIncludesWithPath() {
+        Settings settings;
+        settings.addEnabled("style");
+
+        // Tokenize..
+        Tokenizer tokenizer(&settings, this);
+        std::istringstream istr("#define SOMETHING \n#include \"..\\abc.h\";\n#include \"..\/seven\/xyz.hpp\";");
         tokenizer.tokenize(istr, "test.cpp");
 
         CheckUnusedIncludes CheckUnusedIncludes(&tokenizer, &settings, this);

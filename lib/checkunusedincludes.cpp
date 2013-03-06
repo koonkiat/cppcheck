@@ -47,7 +47,19 @@ void CheckUnusedIncludes::parseTokensForIncludes(const Tokenizer &tokenizer)
             std::string includeName("");
             if (Token::Match(tok, "#include %str%")) {
                 std::string str = tok->strAt(1);
-                includeName = str.substr(1, str.size() - 2);
+                size_t startOfIncludeName = 1;
+                size_t endOfIncludeName = str.find_last_of('\"');
+                //find end of path
+                if(str.find_last_of('/') != std::string::npos)
+                {
+                    startOfIncludeName = str.find_last_of('/') + 1;
+                }
+                if(startOfIncludeName == 1 
+                && str.find_last_of('\\') != std::string::npos)
+                {
+                    startOfIncludeName = str.find_last_of('\\') + 1;
+                }
+                includeName = str.substr(startOfIncludeName, endOfIncludeName - startOfIncludeName);
             }
             else {
                 continue;
