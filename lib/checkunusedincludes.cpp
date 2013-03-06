@@ -69,7 +69,7 @@ void CheckUnusedIncludes::parseTokensForIncludes(const Tokenizer &tokenizer)
             IncludeUsage &incl = _includes[ includeName ];
             incl.filename = includeName;
 
-			incl.dependencyList.push_back(tokenizer.getSourceFilePath());
+			incl.dependencySet.insert(tokenizer.getSourceFilePath());
         }
     }
 }
@@ -247,10 +247,10 @@ void CheckUnusedIncludes::GetIncludeDependencies(std::string & out_String)
     for (IncludeMap::const_iterator it = _includes.begin(); it != _includes.end(); ++it) {
         const IncludeUsage &incl = it->second;
         std::ostringstream ss;
-        ss << incl.filename << " (" << incl.dependencyList.size() << ") :\n";
+        ss << incl.filename << " (" << incl.dependencySet.size() << ") :\n";
         out_String.append(ss.str());
-        //out_String.append(incl.filename + "("+std::to_string(incl.dependencyList.size())+")"+":\n");
-		for (std::list<std::string>::const_iterator str_it = incl.dependencyList.begin(); str_it != incl.dependencyList.end(); ++str_it) {
+        //out_String.append(incl.filename + "("+std::to_string(incl.dependencySet.size())+")"+":\n");
+		for (IncludeDependencySet::const_iterator str_it = incl.dependencySet.begin(); str_it != incl.dependencySet.end(); ++str_it) {
 			out_String.append("\t" + *str_it + "\n");
 		}
 	}

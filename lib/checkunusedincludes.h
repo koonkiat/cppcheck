@@ -60,9 +60,10 @@ public:
         unsigned int lineNumber;
         bool   usedSameFile;
         bool   usedOtherFile;
-        std::list<std::string> dependencyList;
+        std::set<std::string> dependencySet;
     };
     typedef std::map<std::string, IncludeUsage> IncludeMap;
+    typedef std::set<std::string> IncludeDependencySet;
 
     const IncludeMap& GetIncludeMap() { return _includes; }
 	void GetIncludeDependencies(std::string & out_String);

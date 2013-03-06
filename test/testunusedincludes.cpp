@@ -23,6 +23,7 @@
 #include "testsuite.h"
 #include "testutils.h"
 #include "CheckUnusedIncludes.h"
+#include "preprocessor.h"
 #include <sstream>
 
 extern std::ostringstream errout;
@@ -33,7 +34,6 @@ public:
     { }
 
 private:
-
 
     void run() {
 
@@ -50,8 +50,9 @@ private:
 
         TEST_CASE(dependency_multipleFiles);
 
-    }
+		TEST_CASE(noIncludeDuplicationForMultipleConditionalCompiles);
 
+    }
     void check(const char code[]) {
         // Clear the error buffer..
         errout.str("");
@@ -70,6 +71,10 @@ private:
         CheckUnusedIncludes.check(this);
     }
 	
+    static std::string expandMacros(const std::string& code, ErrorLogger *errorLogger = 0) {
+        return Preprocessor::expandMacros(code, "file.cpp", "", errorLogger);
+    }
+//---------------------------------------------------------------------------//	
 	// test path
 	void accept_file() const {
         ASSERT(Path::acceptFile("index.cpp"));
@@ -86,7 +91,6 @@ private:
         ASSERT_EQUALS(true, Path::acceptFile("index.h"));
         ASSERT_EQUALS(true, Path::acceptFile("index.hpp"));
     }
-	
     void understanding_MatchType() {
 		{
 			givenACodeSampleToTokenize enumIsType("enum myEnum{ a,b };", true);
@@ -148,7 +152,7 @@ private:
 
         // Tokenize..
         Tokenizer tokenizer(&settings, this);
-        std::istringstream istr("#define SOMETHING \n#include \"..\\abc.h\";\n#include \"..\/seven\/xyz.hpp\";");
+        std::istringstream istr("#define SOMETHING \n#include \"..\\abc.h\";\n#include \"../seven/xyz.hpp\";");
         tokenizer.tokenize(istr, "test.cpp");
 
         CheckUnusedIncludes CheckUnusedIncludes(&tokenizer, &settings, this);
@@ -158,7 +162,6 @@ private:
         ASSERT_EQUALS(true, includeMap.find("abc.h") != includeMap.end());
         ASSERT_EQUALS(true, includeMap.find("xyz.hpp") != includeMap.end());
     }
-	
     void multipleFiles1() {
 		CheckUnusedIncludes c;
 
@@ -199,7 +202,6 @@ private:
         ASSERT_EQUALS(file1h.filename.str(), it1->second.filename);
         ASSERT_EQUALS(file1cpp.filename.str(), it2->second.filename);
     }
-	
     void dependency_multipleFiles() {
 		CheckUnusedIncludes c;
 
@@ -232,8 +234,31 @@ private:
         //const CheckUnusedIncludes::IncludeMap& includeMap = c.GetIncludeMap();
 		std::string dependencies;
 		c.GetIncludeDependencies(dependencies);
-		ASSERT_EQUALS("file1.h:\n\tfile1.cpp\n\tfile2.h\n\tfile2.cpp\nfile2.h:\n\tfile2.cpp\n", dependencies);
+		ASSERT_EQUALS("file1.h (3) :\n\tfile1.cpp\n\tfile2.cpp\n\tfile2.h\nfile2.h (1) :\n\tfile2.cpp\n", dependencies);
     }
+	void noIncludeDuplicationForMultipleConditionalCompiles()
+	{	
+        Settings settings;
+        settings.addEnabled("style");
+
+        // Tokenize..
+        Tokenizer tokenizer(&settings, this);
+		std::istringstream istr("#ifdef ABC \n#include \"abc.h\";\nbool b = true; \n#else \n#include \"abc.h\";\n \
+								bool b = false; \n \
+								#endif \\ ABC \n \
+								if(b) { \n \
+								return; \n \
+								}");
+		expandMacros(istr.str());
+        tokenizer.tokenize(istr, "test.cpp");
+
+        CheckUnusedIncludes c(&tokenizer, &settings, this);
+        c.parseTokens(tokenizer);
+        c.check(this);
+        
+		const CheckUnusedIncludes::IncludeUsage &incl = c.GetIncludeMap().begin()->second;
+		ASSERT_EQUALS(1, incl.dependencySet.size());
+	}
 };
 
 REGISTER_TEST(TestUnusedIncludes)
