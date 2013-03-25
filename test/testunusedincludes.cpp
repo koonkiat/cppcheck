@@ -24,6 +24,8 @@
 #include "testutils.h"
 #include "CheckUnusedIncludes.h"
 #include "preprocessor.h"
+#include "symboldatabase.h"
+
 #include <sstream>
 
 extern std::ostringstream errout;
@@ -51,7 +53,8 @@ private:
         TEST_CASE(dependency_multipleFiles);
 
 		TEST_CASE(noIncludeDuplicationForMultipleConditionalCompiles);
-
+		
+		TEST_CASE(checkVar);
     }
     void check(const char code[]) {
         // Clear the error buffer..
@@ -258,6 +261,37 @@ private:
         
 		const CheckUnusedIncludes::IncludeUsage &incl = c.GetIncludeMap().begin()->second;
 		ASSERT_EQUALS(1, incl.dependencySet.size());
+	}
+	void checkVar() {
+		Settings settings;
+        settings.addEnabled("style");
+
+        // Tokenize..
+        Tokenizer tokenizer(&settings, this);
+		std::istringstream istr("static std::string i;\n"
+								  "static const std::string j;\n"
+								  "const std::string* k;\n"
+								  "const char m[];\n"
+								  "void f(const char* const l;) {}");
+		expandMacros(istr.str());
+        tokenizer.tokenize(istr, "test.cpp");
+
+		const SymbolDatabase* symbolDatabase = tokenizer.getSymbolDatabase();
+		ASSERT_EQUALS(1+5, symbolDatabase->getVariableListSize());
+		ASSERT_EQUALS("std", symbolDatabase->getVariableFromVarId(1)->typeStartToken()->str());
+        ASSERT_EQUALS("std", symbolDatabase->getVariableFromVarId(2)->typeStartToken()->str());
+        ASSERT_EQUALS("std", symbolDatabase->getVariableFromVarId(3)->typeStartToken()->str());
+        ASSERT_EQUALS("char", symbolDatabase->getVariableFromVarId(4)->typeStartToken()->str());
+        ASSERT_EQUALS("char", symbolDatabase->getVariableFromVarId(5)->typeStartToken()->str());
+
+        ASSERT_EQUALS("string", symbolDatabase->getVariableFromVarId(1)->typeEndToken()->str());
+        ASSERT_EQUALS("string", symbolDatabase->getVariableFromVarId(2)->typeEndToken()->str());
+        ASSERT_EQUALS("*", symbolDatabase->getVariableFromVarId(3)->typeEndToken()->str());
+        ASSERT_EQUALS("char", symbolDatabase->getVariableFromVarId(4)->typeEndToken()->str());
+        ASSERT_EQUALS("*", symbolDatabase->getVariableFromVarId(5)->typeEndToken()->str());
+
+		//ASSERT_EQUALS(false, symbolDatabase->getVariableFromVarId(5)->type()->isForwardDeclaration());
+		//see TestSymbolDatabase::namespaces2()
 	}
 };
 
