@@ -16,6 +16,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <sstream>
+
 // test path - header is allowed now
 #include "path.h"
 
@@ -55,6 +57,8 @@ private:
 		TEST_CASE(noIncludeDuplicationForMultipleConditionalCompiles);
 		
 		TEST_CASE(checkVar);
+
+
     }
     void check(const char code[]) {
         // Clear the error buffer..
@@ -97,7 +101,9 @@ private:
     void understanding_MatchType() {
 		{
 			givenACodeSampleToTokenize enumIsType("enum myEnum{ a,b };", true);
-			ASSERT_EQUALS(true, Token::Match(enumIsType.tokens(), "%type%"));
+            ASSERT_EQUALS(true, Token::Match(enumIsType.tokens(), "%type%"));
+            std::string str = enumIsType.tokens()->strAt(1);
+            ASSERT_EQUALS("myEnum", str);
 		}
 		{
 			givenACodeSampleToTokenize classIsType2("myClass c;", true);
@@ -268,11 +274,19 @@ private:
 
         // Tokenize..
         Tokenizer tokenizer(&settings, this);
-		std::istringstream istr("static std::string i;\n"
-								  "static const std::string j;\n"
-								  "const std::string* k;\n"
-								  "const char m[];\n"
-								  "void f(const char* const l;) {}");
+        std::istringstream istr("#include \"abc.h\";\n#include \"xyz.hpp\";\n"
+                                "class myClass{\n"
+                                "public:\n"
+                                "enum myEnum{\n"
+                                "eNone = 0,\n"
+                                "eOne };\n"
+                                "static std::string i;\n"
+						        "static const std::string j;\n"
+							    "const std::string* k;\n"
+							    "const char m[];\n"
+							    "void f(const char* l) {}"
+                                "};"
+                                );
 		expandMacros(istr.str());
         tokenizer.tokenize(istr, "test.cpp");
 
@@ -290,8 +304,18 @@ private:
         ASSERT_EQUALS("char", symbolDatabase->getVariableFromVarId(4)->typeEndToken()->str());
         ASSERT_EQUALS("*", symbolDatabase->getVariableFromVarId(5)->typeEndToken()->str());
 
-		//ASSERT_EQUALS(false, symbolDatabase->getVariableFromVarId(5)->type()->isForwardDeclaration());
-		//see TestSymbolDatabase::namespaces2()
+        
+        const Scope *scope = NULL;
+        for (std::list<Scope>::const_iterator it = symbolDatabase->scopeList.begin(); it != symbolDatabase->scopeList.end(); ++it) {
+            if (it->isClassOrStruct()) {
+                scope = &(*it);
+                break;
+            }
+        }
+        ASSERT(scope != 0);
+        if (!scope)
+            return;
+        ASSERT_EQUALS("myClass", scope->className);
 	}
 };
 

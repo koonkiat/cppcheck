@@ -69,3 +69,7 @@ htmlreport/MANIFEST
 
 # kdevelop 4.x
 *.kdev4
+cli/debug/cppcheck.ilk
+cli/debug/pcgui.log
+cli/debug/PCGUILobbyDataProvidersOptions.log
+test/debug/testrunner.ilk
