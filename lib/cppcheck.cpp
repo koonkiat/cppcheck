@@ -227,8 +227,11 @@ unsigned int CppCheck::processFile(const std::string& filename)
 void CppCheck::checkFunctionUsage()
 {
     // This generates false positives - especially for libraries
-    //HACK
-    if (/*_settings.isEnabled("unusedFunction") &&*/ _settings._jobs == 1) {
+    if (
+#ifdef INCLUDE_CHECKER
+        _settings.isEnabled("unusedFunction") &&
+#endif
+        _settings._jobs == 1) {
         const bool verbose_orig = _settings._verbose;
         _settings._verbose = false;
 

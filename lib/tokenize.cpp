@@ -1814,8 +1814,10 @@ bool Tokenizer::tokenize(std::istream &code,
         return false;
     }
 
+#ifndef INCLUDE_CHECKER
     // enum..
-    //simplifyEnum(); // HACK
+    simplifyEnum();
+#endif
 
     // Remove __asm..
     simplifyAsm();

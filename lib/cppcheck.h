@@ -182,8 +182,10 @@ private:
      */
     virtual void reportInfo(const ErrorLogger::ErrorMessage &msg);
 
-    //HACK
+#ifdef INCLUDE_CHECKER
     CheckUnusedIncludes _checkUnusedIncludes;
+#endif
+
     ErrorLogger &_errorLogger;
 
     /** @brief Current preprocessor configuration */

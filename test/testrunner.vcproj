@@ -46,7 +46,7 @@
 				AdditionalOptions="-Zm200 -w34100 -w34189"
 				Optimization="4"
 				AdditionalIncludeDirectories="&quot;.&quot;,&quot;..\cli&quot;,&quot;..\lib&quot;,&quot;..\externals\tinyxml&quot;,..\..\..\..\Qt\4.8.1\mkspecs\win32-msvc2008"
-				PreprocessorDefinitions="_CONSOLE,UNICODE,WIN32,QT_LARGEFILE_SUPPORT,_CRT_SECURE_NO_WARNINGS"
+				PreprocessorDefinitions="_CONSOLE,UNICODE,WIN32,QT_LARGEFILE_SUPPORT,_CRT_SECURE_NO_WARNINGS,INCLUDE_CHECKER"
 				GeneratePreprocessedFile="0"
 				ExceptionHandling="1"
 				RuntimeLibrary="3"
@@ -135,7 +135,7 @@
 				AdditionalOptions="-Zm200 -w34100 -w34189"
 				Optimization="2"
 				AdditionalIncludeDirectories="&quot;.&quot;,&quot;..\cli&quot;,&quot;..\lib&quot;,&quot;..\externals\tinyxml&quot;,..\..\..\..\Qt\4.8.1\mkspecs\win32-msvc2008"
-				PreprocessorDefinitions="_CONSOLE,UNICODE,WIN32,QT_LARGEFILE_SUPPORT,_CRT_SECURE_NO_WARNINGS,NDEBUG"
+				PreprocessorDefinitions="_CONSOLE,UNICODE,WIN32,QT_LARGEFILE_SUPPORT,_CRT_SECURE_NO_WARNINGS,NDEBUG,INCLUDE_CHECKER"
 				GeneratePreprocessedFile="0"
 				ExceptionHandling="1"
 				RuntimeLibrary="2"
@@ -422,13 +422,6 @@
 			<File
 				RelativePath="..\lib\checkunusedfunctions.cpp"
 				>
-				<FileConfiguration
-					Name="Debug|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-					/>
-				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="..\lib\checkunusedincludes.cpp"
@@ -1029,12 +1022,28 @@
 						Name="VCCLCompilerTool"
 					/>
 				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+					/>
+				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="..\externals\tinyxml\tinyxml.cpp"
 				>
 				<FileConfiguration
 					Name="Debug|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|Win32"
 					ExcludedFromBuild="true"
 					>
 					<Tool
@@ -1053,12 +1062,28 @@
 						Name="VCCLCompilerTool"
 					/>
 				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+					/>
+				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="..\externals\tinyxml\tinyxmlparser.cpp"
 				>
 				<FileConfiguration
 					Name="Debug|Win32"
+					ExcludedFromBuild="true"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|Win32"
 					ExcludedFromBuild="true"
 					>
 					<Tool
