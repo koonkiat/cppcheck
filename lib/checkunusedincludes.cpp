@@ -76,7 +76,7 @@ void CheckUnusedIncludes::parseTokensForIncludes(const Tokenizer &tokenizer)
 }
 void CheckUnusedIncludes::parseTokensForDeclaredTypes(const Tokenizer &tokenizer)
 {
-    // use symboldatabase var list
+    // use symboldatabase scope list
     const SymbolDatabase* symbolDatabase = tokenizer.getSymbolDatabase();
 
     for (std::list<Scope>::const_iterator scope = symbolDatabase->scopeList.begin(); scope != symbolDatabase->scopeList.end(); ++scope) {
@@ -95,6 +95,12 @@ void CheckUnusedIncludes::parseTokensForDeclaredTypes(const Tokenizer &tokenizer
             _declaredSymbols.insert(tok->strAt(1));
         }
     }
+    // todo parsing for typedef
+}
+void CheckUnusedIncludes::parseTokensForRequiredTypes(const Tokenizer &tokenizer)
+{
+    // use symboldatabase var list
+    const SymbolDatabase* symbolDatabase = tokenizer.getSymbolDatabase();
 
     size_t listCount = symbolDatabase->getVariableListSize();
     for (unsigned int i = 0; i < listCount; ++i)
@@ -104,9 +110,8 @@ void CheckUnusedIncludes::parseTokensForDeclaredTypes(const Tokenizer &tokenizer
         {
             continue;
         }
-        // we can determine if the var is declared or required from this loop
-
-        /*if (var->typeEndToken() && var->typeStartToken() 
+        
+        if (var->typeEndToken() && var->typeStartToken() 
             && !var->typeEndToken()->isStandardType()
             && !var->typeStartToken()->isStandardType())
         {
@@ -116,149 +121,16 @@ void CheckUnusedIncludes::parseTokensForDeclaredTypes(const Tokenizer &tokenizer
                 bool isPointerOrRef = var->typeEndToken()->str() == "*" || var->typeEndToken()->str() == "&";
                 if (isPointerOrRef)
                 {
-                    _declaredSymbols.insert(var->typeEndToken()->previous()->str());
+                    _requiredSymbols.insert(var->typeEndToken()->previous()->str());
                 }
                 else
                 {
-                    _declaredSymbols.insert(var->typeEndToken()->str());
+                    _requiredSymbols.insert(var->typeEndToken()->str());
                 }
             }
-        }*/
-    }
-
-
-}
-void CheckUnusedIncludes::parseTokensForRequiredTypes(const Tokenizer &tokenizer)
-{
-    // use symboldatabase var list
-    const SymbolDatabase* symbolDatabase = tokenizer.getSymbolDatabase();
-    size_t listCount = symbolDatabase->getVariableListSize();
-    for (unsigned int i = 0; i < listCount; ++i)
-    {
-        const Variable* var = symbolDatabase->getVariableFromVarId(i);
-        if (!var)
-        {
-            continue;
-        }
-        if (var->type() && var->type()->isForwardDeclaration())
-        {
-        }
-    }
-    
-
-    // do we need custom parsing for enums? are they just considered to by types?
-    
-
-
-    /*// Function declarations..
-    for (const Token *tok = tokenizer.tokens(); tok; tok = tok->next()) {
-        if (tok->fileIndex() != 0)
-            continue;
-
-        // token contains a ':' => skip to next ; or {
-        if (tok->str().find(":") != std::string::npos) {
-            while (tok && tok->str().find_first_of(";{"))
-                tok = tok->next();
-            if (tok)
-                continue;
-            break;
-        }
-
-        // If this is a template function, skip it
-        if (tok->previous() && tok->previous()->str() == ">")
-            continue;
-
-        const Token *funcname = 0;
-
-        if (Token::Match(tok, "%type% %var% ("))
-            funcname = tok->next();
-        else if (Token::Match(tok, "%type% *|& %var% ("))
-            funcname = tok->tokAt(2);
-        else if (Token::Match(tok, "%type% :: %var% (") && !Token::Match(tok, tok->strAt(2).c_str()))
-            funcname = tok->tokAt(2);
-
-        // Don't assume throw as a function name: void foo() throw () {}
-        if (Token::Match(tok->previous(), ")|const") || funcname == 0)
-            continue;
-
-        tok = funcname->linkAt(1);
-
-        // Check that ") {" is found..
-        if (! Token::Match(tok, ") const| {") &&
-            ! Token::Match(tok, ") const| throw ( ) {"))
-            funcname = 0;
-
-        if (funcname) {
-            IncludeUsage &func = _includes[ funcname->str()];
-
-            if (!func.lineNumber)
-                func.lineNumber = funcname->linenr();
-
-            // No filename set yet..
-            if (func.filename.empty()) {
-                func.filename = tokenizer.getSourceFilePath();
-            }
-            // Multiple files => filename = "+"
-            else if (func.filename != tokenizer.getSourceFilePath()) {
-                //func.filename = "+";
-                func.usedOtherFile |= func.usedSameFile;
-            }
         }
     }
 
-    // Function usage..
-    const Token *scopeEnd = NULL;
-    for (const Token *tok = tokenizer.tokens(); tok; tok = tok->next()) {
-        if (scopeEnd == NULL) {
-            if (!Token::Match(tok, ")|= const| {"))
-                continue;
-            scopeEnd = tok;
-            while (scopeEnd->str() != "{")
-                scopeEnd = scopeEnd->next();
-            scopeEnd = scopeEnd->link();
-        } else if (tok == scopeEnd) {
-            scopeEnd = NULL;
-            continue;
-        }
-
-
-        const Token *funcname = 0;
-
-        if (Token::Match(tok->next(), "%var% (")) {
-            funcname = tok->next();
-        }
-
-        else if (Token::Match(tok, "[;{}.,()[=+-/&|!?:] %var% [(),;:}]"))
-            funcname = tok->next();
-
-        else if (Token::Match(tok, "[=(,] &| %var% :: %var%")) {
-            funcname = tok->next();
-            if (funcname->str() == "&")
-                funcname = funcname->next();
-            while (Token::Match(funcname,"%var% :: %var%"))
-                funcname = funcname->tokAt(2);
-            if (!Token::Match(funcname, "%var% [,);]"))
-                continue;
-        }
-
-        else
-            continue;
-
-        // funcname ( => Assert that the end parentheses isn't followed by {
-        if (Token::Match(funcname, "%var% (")) {
-            if (Token::Match(funcname->linkAt(1), ") const|throw|{"))
-                funcname = NULL;
-        }
-
-        if (funcname) {
-            IncludeUsage &func = _includes[ funcname->str()];
-
-            if (func.filename.empty() || func.filename == "+")
-                func.usedOtherFile = true;
-            else
-                func.usedSameFile = true;
-        }
-    }*/
 }
 
 
