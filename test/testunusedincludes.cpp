@@ -470,6 +470,183 @@ private:
             ASSERT_EQUALS("IncludeDependencySet", it->c_str());
         }
     }
+	/*
+    void simplifyTypedef5() {
+        // ticket #780
+        const char code[] =
+            "typedef struct yy_buffer_state *YY_BUFFER_STATE;\n"
+            "void f()\n"
+            "{\n"
+            "    YY_BUFFER_STATE state;\n"
+            "}\n";
+
+        const char expected[] =
+            "void f ( ) "
+            "{ "
+            "struct yy_buffer_state * state ; "
+            "}";
+
+        ASSERT_EQUALS(expected, tok(code, false));
+    }
+    void simplifyTypedef7() {
+        const char code[] = "typedef int abc ; "
+                            "Fred :: abc f ;";
+        const char expected[] = "Fred :: abc f ;";
+        ASSERT_EQUALS(expected, tok(code, false));
+    }
+    void simplifyTypedef9() {
+        const char code[] = "typedef struct s S, * PS;\n"
+                            "typedef struct t { int a; } T, *TP;\n"
+                            "typedef struct { int a; } U;\n"
+                            "typedef struct { int a; } * V;\n"
+                            "S s;\n"
+                            "PS ps;\n"
+                            "T t;\n"
+                            "TP tp;\n"
+                            "U u;\n"
+                            "V v;";
+
+        const char expected[] =
+            "struct t { int a ; } ; "
+            "struct U { int a ; } ; "
+            "struct Unnamed0 { int a ; } ; "
+            "struct s s ; "
+            "struct s * ps ; "
+            "struct t t ; "
+            "struct t * tp ; "
+            "struct U u ; "
+            "struct Unnamed0 * v ;";
+
+        ASSERT_EQUALS(expected, tok(code, false));
+    }
+    void simplifyTypedef19() {
+        {
+            // ticket #1275
+            const char code[] = "typedef struct {} A, *B, **C;\n"
+                                "A a;\n"
+                                "B b;\n"
+                                "C c;";
+
+            const char expected[] =
+                "struct A { } ; "
+                "struct A a ; "
+                "struct A * b ; "
+                "struct A * * c ;";
+
+            ASSERT_EQUALS(expected, tok(code, false));
+        }
+	}
+	
+    void simplifyTypedef10() {
+        const char code[] = "typedef union s S, * PS;\n"
+                            "typedef union t { int a; float b ; } T, *TP;\n"
+                            "typedef union { int a; float b; } U;\n"
+                            "typedef union { int a; float b; } * V;\n"
+                            "S s;\n"
+                            "PS ps;\n"
+                            "T t;\n"
+                            "TP tp;\n"
+                            "U u;\n"
+                            "V v;";
+
+        const char expected[] =
+            "union t { int a ; float b ; } ; "
+            "union U { int a ; float b ; } ; "
+            "union Unnamed1 { int a ; float b ; } ; "
+            "union s s ; "
+            "union s * ps ; "
+            "union t t ; "
+            "union t * tp ; "
+            "union U u ; "
+            "union Unnamed1 * v ;";
+
+        ASSERT_EQUALS(expected, tok(code, false));
+    }
+
+    void simplifyTypedef11() {
+        const char code[] = "typedef enum { a = 0 , b = 1 , c = 2 } abc;\n"
+                            "typedef enum xyz { x = 0 , y = 1 , z = 2 } XYZ;\n"
+                            "abc e1;\n"
+                            "XYZ e2;";
+
+        const char expected[] = "int e1 ; "
+                                "int e2 ;";
+
+        ASSERT_EQUALS(expected, tok(code, false));
+    }
+
+    void simplifyTypedef12() {
+        const char code[] = "typedef vector<int> V1;\n"
+                            "typedef std::vector<int> V2;\n"
+                            "typedef std::vector<std::vector<int> > V3;\n"
+                            "typedef std::list<int>::iterator IntListIterator;\n"
+                            "V1 v1;\n"
+                            "V2 v2;\n"
+                            "V3 v3;\n"
+                            "IntListIterator iter;";
+
+        const char expected[] =
+            "vector < int > v1 ; "
+            "std :: vector < int > v2 ; "
+            "std :: vector < std :: vector < int > > v3 ; "
+            "std :: list < int > :: iterator iter ;";
+
+        ASSERT_EQUALS(expected, tok(code, false));
+    }
+    void simplifyTypedef15() {
+        {
+            const char code[] = "typedef char frame[10];\n"
+                                "frame f;";
+
+            const char expected[] = "char f [ 10 ] ;";
+
+            ASSERT_EQUALS(expected, tok(code, false));
+        }
+
+        {
+            const char code[] = "typedef unsigned char frame[10];\n"
+                                "frame f;";
+
+            const char expected[] = "unsigned char f [ 10 ] ;";
+
+            ASSERT_EQUALS(expected, tok(code, false));
+        }
+    }
+    void simplifyTypedef21() {
+        const char code[] = "typedef void (* PF)();\n"
+                            "typedef void * (* PFV)(void *);\n"
+                            "PF pf;\n"
+                            "PFV pfv;";
+
+        const char expected[] =
+            ""
+            ""
+            "void ( * pf ) ( ) ; "
+            "void * ( * pfv ) ( void * ) ;";
+
+        ASSERT_EQUALS(expected, simplifyTypedef(code));
+    }
+	void simplifyTypedef22() {
+        {
+            const char code[] = "class Fred {\n"
+                                "    typedef void * (*testfp)(void *);\n"
+                                "    testfp get() { return test; }\n"
+                                "    static void * test(void * p) { return p; }\n"
+                                "};\n";
+
+            const char expected[] =
+                "class Fred { "
+                ""
+                "void * ( * get ( ) ) ( void * ) { return test ; } "
+                "static void * test ( void * p ) { return p ; } "
+                "} ;";
+
+            ASSERT_EQUALS(expected, tok(code, false));
+        }
+	}
+
+
+	*/
 };
 
 REGISTER_TEST(TestUnusedIncludes)
