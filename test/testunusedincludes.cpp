@@ -60,6 +60,8 @@ private:
 
         TEST_CASE(checkDeclaredVar_manual);
         TEST_CASE(checkRequiredVar);
+
+        TEST_CASE(checkAnonymousEnum);
     }
     void check(const char code[]) {
         // Clear the error buffer..
@@ -353,8 +355,8 @@ private:
         c.check(this);
 
         const CheckUnusedIncludes::StringSet& declaredSymbols = c.GetDeclaredSymbolsSet();
-        unsigned int expectedSymbolCount = 2;
-        ASSERT_EQUALS(3, declaredSymbols.size());
+        unsigned int expectedSymbolCount = 3;
+        ASSERT_EQUALS(expectedSymbolCount, declaredSymbols.size());
         
         if (declaredSymbols.size() >= expectedSymbolCount)
         {
@@ -408,6 +410,38 @@ private:
             ASSERT_EQUALS("abc", it->c_str());
             ++it;
             ASSERT_EQUALS("xyz", it->c_str());
+        }
+    }
+
+
+    void checkAnonymousEnum() {
+        Settings settings;
+        settings.addEnabled("style");
+
+        // Tokenize..
+        Tokenizer tokenizer(&settings, this);
+        std::istringstream istr(
+            "enum myEnum{\n"
+            "eNone = 0,\n"
+            "eOne };\n"
+            "enum {\n"
+            "eAnonNone = 0,\n"
+            "eAnonOne };\n"
+            );
+        expandMacros(istr.str());
+        tokenizer.tokenize(istr, "test.cpp");
+        CheckUnusedIncludes c(&tokenizer, &settings, this);
+        c.parseTokens(tokenizer);
+        c.check(this);
+
+        const CheckUnusedIncludes::StringSet& declaredSymbols = c.GetDeclaredSymbolsSet();
+        unsigned int expectedSymbolCount = 1;
+        ASSERT_EQUALS(expectedSymbolCount, declaredSymbols.size());
+
+        if (declaredSymbols.size() >= expectedSymbolCount)
+        {
+            CheckUnusedIncludes::StringSet::const_iterator it = declaredSymbols.begin();
+            ASSERT_EQUALS("myEnum", it->c_str());
         }
     }
 };
