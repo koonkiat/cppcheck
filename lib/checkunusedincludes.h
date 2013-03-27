@@ -32,6 +32,8 @@
 
 class CPPCHECKLIB CheckUnusedIncludes: public Check {
 public:
+    typedef std::set<std::string> StringSet;
+
     /** @brief This constructor is used when registering the CheckUnusedIncludes */
     CheckUnusedIncludes() : Check(myName())
     { }
@@ -60,13 +62,15 @@ public:
         unsigned int lineNumber;
         bool   usedSameFile;
         bool   usedOtherFile;
-        std::set<std::string> dependencySet;
+        StringSet dependencySet;
     };
     typedef std::map<std::string, IncludeUsage> IncludeMap;
-    typedef std::set<std::string> IncludeDependencySet;
 
     const IncludeMap& GetIncludeMap() { return _includes; }
 	void GetIncludeDependencies(std::string & out_String);
+    const StringSet& GetDeclaredSymbolsSet() { return _declaredSymbols; }
+    const StringSet& GetRequiredSymbolsSet() { return _requiredSymbols; }
+
 private:
 
     void getErrorMessages(ErrorLogger *errorLogger, const Settings *settings) const {
@@ -97,6 +101,8 @@ private:
     }
 
     IncludeMap _includes;
+    StringSet _declaredSymbols;
+    StringSet _requiredSymbols;
 };
 /// @}
 //---------------------------------------------------------------------------

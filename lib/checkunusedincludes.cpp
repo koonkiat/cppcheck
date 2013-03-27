@@ -23,6 +23,7 @@
 #include "token.h"
 #include <cctype>
 #include <sstream>
+#include "symboldatabase.h"
 //---------------------------------------------------------------------------
 
 
@@ -75,11 +76,80 @@ void CheckUnusedIncludes::parseTokensForIncludes(const Tokenizer &tokenizer)
 }
 void CheckUnusedIncludes::parseTokensForDeclaredTypes(const Tokenizer &tokenizer)
 {
-	tokenizer;
+    // use symboldatabase var list
+    const SymbolDatabase* symbolDatabase = tokenizer.getSymbolDatabase();
+
+    for (std::list<Scope>::const_iterator scope = symbolDatabase->scopeList.begin(); scope != symbolDatabase->scopeList.end(); ++scope) {
+        if (scope->isForwardDeclaration()) {
+            continue;
+        }
+        if (scope->isClassOrStruct()) {
+            _declaredSymbols.insert(scope->className);
+        }
+    }
+    // custom parsing for enums
+    for (const Token *tok = tokenizer.tokens(); tok; tok = tok->next()) {
+        if (tok->fileIndex() != 0)
+            continue;
+        if(Token::Match(tok, "enum %var%")) {
+            _declaredSymbols.insert(tok->strAt(1));
+        }
+    }
+
+    size_t listCount = symbolDatabase->getVariableListSize();
+    for (unsigned int i = 0; i < listCount; ++i)
+    {
+        const Variable* var = symbolDatabase->getVariableFromVarId(i);
+        if (!var || !var->typeEndToken())
+        {
+            continue;
+        }
+        // we can determine if the var is declared or required from this loop
+
+        /*if (var->typeEndToken() && var->typeStartToken() 
+            && !var->typeEndToken()->isStandardType()
+            && !var->typeStartToken()->isStandardType())
+        {
+            bool isFromStdLib = var->typeStartToken()->str() == "std";
+            if (!isFromStdLib)
+            {
+                bool isPointerOrRef = var->typeEndToken()->str() == "*" || var->typeEndToken()->str() == "&";
+                if (isPointerOrRef)
+                {
+                    _declaredSymbols.insert(var->typeEndToken()->previous()->str());
+                }
+                else
+                {
+                    _declaredSymbols.insert(var->typeEndToken()->str());
+                }
+            }
+        }*/
+    }
+
+
 }
 void CheckUnusedIncludes::parseTokensForRequiredTypes(const Tokenizer &tokenizer)
 {
-    tokenizer;
+    // use symboldatabase var list
+    const SymbolDatabase* symbolDatabase = tokenizer.getSymbolDatabase();
+    size_t listCount = symbolDatabase->getVariableListSize();
+    for (unsigned int i = 0; i < listCount; ++i)
+    {
+        const Variable* var = symbolDatabase->getVariableFromVarId(i);
+        if (!var)
+        {
+            continue;
+        }
+        if (var->type() && var->type()->isForwardDeclaration())
+        {
+        }
+    }
+    
+
+    // do we need custom parsing for enums? are they just considered to by types?
+    
+
+
     /*// Function declarations..
     for (const Token *tok = tokenizer.tokens(); tok; tok = tok->next()) {
         if (tok->fileIndex() != 0)
@@ -250,7 +320,7 @@ void CheckUnusedIncludes::GetIncludeDependencies(std::string & out_String)
         ss << incl.filename << " (" << incl.dependencySet.size() << ") :\n";
         out_String.append(ss.str());
         //out_String.append(incl.filename + "("+std::to_string(incl.dependencySet.size())+")"+":\n");
-		for (IncludeDependencySet::const_iterator str_it = incl.dependencySet.begin(); str_it != incl.dependencySet.end(); ++str_it) {
+		for (StringSet::const_iterator str_it = incl.dependencySet.begin(); str_it != incl.dependencySet.end(); ++str_it) {
 			out_String.append("\t" + *str_it + "\n");
 		}
 	}

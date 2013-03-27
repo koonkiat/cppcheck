@@ -56,9 +56,10 @@ private:
 
 		TEST_CASE(noIncludeDuplicationForMultipleConditionalCompiles);
 		
-		TEST_CASE(checkVar);
+		TEST_CASE(checkAllVar_symbolDB);
 
-
+        TEST_CASE(checkDeclaredVar_manual);
+        TEST_CASE(checkRequiredVar);
     }
     void check(const char code[]) {
         // Clear the error buffer..
@@ -104,6 +105,9 @@ private:
             ASSERT_EQUALS(true, Token::Match(enumIsType.tokens(), "%type%"));
             std::string str = enumIsType.tokens()->strAt(1);
             ASSERT_EQUALS("myEnum", str);
+
+            ASSERT_EQUALS(true, Token::Match(enumIsType.tokens(), "enum %var%"));
+
 		}
 		{
 			givenACodeSampleToTokenize classIsType2("myClass c;", true);
@@ -268,7 +272,7 @@ private:
 		const CheckUnusedIncludes::IncludeUsage &incl = c.GetIncludeMap().begin()->second;
 		ASSERT_EQUALS(1, incl.dependencySet.size());
 	}
-	void checkVar() {
+	void checkAllVar_symbolDB() {
 		Settings settings;
         settings.addEnabled("style");
 
@@ -317,6 +321,95 @@ private:
             return;
         ASSERT_EQUALS("myClass", scope->className);
 	}
+
+    void checkDeclaredVar_manual() {
+        Settings settings;
+        settings.addEnabled("style");
+
+        // Tokenize..
+        Tokenizer tokenizer(&settings, this);
+        std::istringstream istr("#include \"abc.h\";\n"
+                                "class xyz;\n"
+                                "class myClass{\n"
+                                    "public:\n"
+                                    "enum myEnum{\n"
+                                        "eNone = 0,\n"
+                                        "eOne };\n"
+                                    "abc Type_abc1;\n"
+                                    "struct myStruct{\n"
+                                        "xyz* Type_xyz1;\n"
+                                    "};\n"
+                                    "static std::string str1;\n"
+                                    "static const std::string str2;\n"
+                                    "const std::string* pStr1;\n"
+                                    "const char charArr[];\n"
+                                    "void f(const char* pChar) {}"
+                                "};"
+                                );
+        expandMacros(istr.str());
+        tokenizer.tokenize(istr, "test.cpp");
+        CheckUnusedIncludes c(&tokenizer, &settings, this);
+        c.parseTokens(tokenizer);
+        c.check(this);
+
+        const CheckUnusedIncludes::StringSet& declaredSymbols = c.GetDeclaredSymbolsSet();
+        unsigned int expectedSymbolCount = 2;
+        ASSERT_EQUALS(3, declaredSymbols.size());
+        
+        if (declaredSymbols.size() >= expectedSymbolCount)
+        {
+            CheckUnusedIncludes::StringSet::const_iterator it = declaredSymbols.begin();
+            ASSERT_EQUALS("myClass", it->c_str());
+            ++it;
+            ASSERT_EQUALS("myEnum", it->c_str());
+            ++it;
+            ASSERT_EQUALS("myStruct", it->c_str());
+        }
+    }
+
+
+    void checkRequiredVar() {
+        Settings settings;
+        settings.addEnabled("style");
+
+        // Tokenize..
+        Tokenizer tokenizer(&settings, this);
+        std::istringstream istr("#include \"abc.h\";\n"
+            "class xyz;\n"
+            "class myClass{\n"
+            "public:\n"
+            "enum myEnum{\n"
+            "eNone = 0,\n"
+            "eOne };\n"
+            "abc Type_abc1;\n"
+            "struct myStruct{\n"
+            "xyz* Type_xyz1;\n"
+            "};\n"
+            "static std::string str1;\n"
+            "static const std::string str2;\n"
+            "const std::string* pStr1;\n"
+            "const char charArr[];\n"
+            "void f(const char* pChar) {}"
+            "};"
+            );
+        expandMacros(istr.str());
+        tokenizer.tokenize(istr, "test.cpp");
+        CheckUnusedIncludes c(&tokenizer, &settings, this);
+        c.parseTokens(tokenizer);
+        c.check(this);
+
+        const CheckUnusedIncludes::StringSet& requiredSymbols = c.GetRequiredSymbolsSet();
+        unsigned int expectedSymbolCount = 2;
+        ASSERT_EQUALS(expectedSymbolCount, requiredSymbols.size());
+
+        if (requiredSymbols.size() >= expectedSymbolCount)
+        {
+            CheckUnusedIncludes::StringSet::const_iterator it = requiredSymbols.begin();
+            ASSERT_EQUALS("abc", it->c_str());
+            ++it;
+            ASSERT_EQUALS("xyz", it->c_str());
+        }
+    }
 };
 
 REGISTER_TEST(TestUnusedIncludes)

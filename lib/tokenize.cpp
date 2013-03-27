@@ -1815,7 +1815,7 @@ bool Tokenizer::tokenize(std::istream &code,
     }
 
     // enum..
-    simplifyEnum();
+    //simplifyEnum(); // HACK
 
     // Remove __asm..
     simplifyAsm();
