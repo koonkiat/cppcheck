@@ -62,6 +62,7 @@ private:
         TEST_CASE(checkRequiredVar);
 
         TEST_CASE(checkAnonymousEnum);
+        TEST_CASE(checkTypeDef);
     }
     void check(const char code[]) {
         // Clear the error buffer..
@@ -354,13 +355,13 @@ private:
         c.parseTokens(tokenizer);
         c.check(this);
 
-        const CheckUnusedIncludes::StringSet& declaredSymbols = c.GetDeclaredSymbolsSet();
+        const CheckUnusedIncludes::DeclaredSymbolsSet& declaredSymbols = c.GetDeclaredSymbolsSet();
         unsigned int expectedSymbolCount = 3;
         ASSERT_EQUALS(expectedSymbolCount, declaredSymbols.size());
         
         if (declaredSymbols.size() >= expectedSymbolCount)
         {
-            CheckUnusedIncludes::StringSet::const_iterator it = declaredSymbols.begin();
+            CheckUnusedIncludes::DeclaredSymbolsSet::const_iterator it = declaredSymbols.begin();
             ASSERT_EQUALS("myClass", it->c_str());
             ++it;
             ASSERT_EQUALS("myEnum", it->c_str());
@@ -400,13 +401,13 @@ private:
         c.parseTokens(tokenizer);
         c.check(this);
 
-        const CheckUnusedIncludes::StringSet& requiredSymbols = c.GetRequiredSymbolsSet();
+        const CheckUnusedIncludes::RequiredSymbolsSet& requiredSymbols = c.GetRequiredSymbolsSet();
         unsigned int expectedSymbolCount = 2;
         ASSERT_EQUALS(expectedSymbolCount, requiredSymbols.size());
 
         if (requiredSymbols.size() >= expectedSymbolCount)
         {
-            CheckUnusedIncludes::StringSet::const_iterator it = requiredSymbols.begin();
+            CheckUnusedIncludes::RequiredSymbolsSet::const_iterator it = requiredSymbols.begin();
             ASSERT_EQUALS("abc", it->c_str());
             ++it;
             ASSERT_EQUALS("xyz", it->c_str());
@@ -434,14 +435,39 @@ private:
         c.parseTokens(tokenizer);
         c.check(this);
 
-        const CheckUnusedIncludes::StringSet& declaredSymbols = c.GetDeclaredSymbolsSet();
+        const CheckUnusedIncludes::DeclaredSymbolsSet& declaredSymbols = c.GetDeclaredSymbolsSet();
         unsigned int expectedSymbolCount = 1;
         ASSERT_EQUALS(expectedSymbolCount, declaredSymbols.size());
 
         if (declaredSymbols.size() >= expectedSymbolCount)
         {
-            CheckUnusedIncludes::StringSet::const_iterator it = declaredSymbols.begin();
+            CheckUnusedIncludes::DeclaredSymbolsSet::const_iterator it = declaredSymbols.begin();
             ASSERT_EQUALS("myEnum", it->c_str());
+        }
+    }
+    void checkTypeDef() {
+        Settings settings;
+        settings.addEnabled("style");
+
+        // Tokenize..
+        Tokenizer tokenizer(&settings, this);
+        std::istringstream istr(
+            "typedef std::set<std::string> IncludeDependencySet;\n"
+            );
+        expandMacros(istr.str());
+        tokenizer.tokenize(istr, "test.cpp");
+        CheckUnusedIncludes c(&tokenizer, &settings, this);
+        c.parseTokens(tokenizer);
+        c.check(this);
+
+        const CheckUnusedIncludes::DeclaredSymbolsSet& declaredSymbols = c.GetDeclaredSymbolsSet();
+        unsigned int expectedSymbolCount = 1;
+        ASSERT_EQUALS(expectedSymbolCount, declaredSymbols.size());
+
+        if (declaredSymbols.size() >= expectedSymbolCount)
+        {
+            CheckUnusedIncludes::DeclaredSymbolsSet::const_iterator it = declaredSymbols.begin();
+            ASSERT_EQUALS("IncludeDependencySet", it->c_str());
         }
     }
 };

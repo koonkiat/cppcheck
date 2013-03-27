@@ -192,7 +192,7 @@ void CheckUnusedIncludes::GetIncludeDependencies(std::string & out_String)
         ss << incl.filename << " (" << incl.dependencySet.size() << ") :\n";
         out_String.append(ss.str());
         //out_String.append(incl.filename + "("+std::to_string(incl.dependencySet.size())+")"+":\n");
-		for (StringSet::const_iterator str_it = incl.dependencySet.begin(); str_it != incl.dependencySet.end(); ++str_it) {
+		for (IncludeDependencySet::const_iterator str_it = incl.dependencySet.begin(); str_it != incl.dependencySet.end(); ++str_it) {
 			out_String.append("\t" + *str_it + "\n");
 		}
 	}
