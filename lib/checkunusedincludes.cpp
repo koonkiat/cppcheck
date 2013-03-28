@@ -235,8 +235,12 @@ void CheckUnusedIncludes::parseTokenForTypedef( const Tokenizer &tokenizer )
                         typeEnd = tokOffset;
                         tokOffset = tokOffset->next();
                         atEnd = true;
-                    } else
+                    }else if (Token::Match(tokOffset, "*|&") && tokOffset->next()) {
+                        typeEnd = tokOffset;
+                        tokOffset = tokOffset->next();
+                    } else {
                         atEnd = true;
+                    }
                 }
             } else
                 continue; // invalid input
@@ -263,6 +267,8 @@ void CheckUnusedIncludes::parseTokenForTypedef( const Tokenizer &tokenizer )
                 tok = typeEnd;
                 tokOffset = tok->next();
             }
+//             if (Token::Match(tokOffset, "%var%")) {
+//             }
             if (!typeStart->isStandardType())
             {
                 _declaredSymbols.insert(tokOffset->str());
