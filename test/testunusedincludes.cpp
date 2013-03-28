@@ -66,7 +66,7 @@ private:
         TEST_CASE(Typedef5);
         TEST_CASE(Typedef7);
     }
-    void check(const char code[]) {
+    void check(CheckUnusedIncludes &c, const char code[]) {
         // Clear the error buffer..
         errout.str("");
 
@@ -76,12 +76,13 @@ private:
         // Tokenize..
         Tokenizer tokenizer(&settings, this);
         std::istringstream istr(code);
+        expandMacros(istr.str());
         tokenizer.tokenize(istr, "test.cpp");
 
         // Check for unused functions..
-        CheckUnusedIncludes CheckUnusedIncludes(&tokenizer, &settings, this);
-        CheckUnusedIncludes.parseTokens(tokenizer);
-        CheckUnusedIncludes.check(this);
+//        CheckUnusedIncludes CheckUnusedIncludes(&tokenizer, &settings, this);
+        c.parseTokens(tokenizer);
+        c.check(this);
     }
 	
     static std::string expandMacros(const std::string& code, ErrorLogger *errorLogger = 0) {
@@ -133,50 +134,29 @@ private:
 		}
     }
     void parseIncludesAngle() {
-        Settings settings;
-        settings.addEnabled("style");
+        CheckUnusedIncludes c;
+        check(c, "#define SOMETHING \n#include <abc.h>;\n#include <xyz>;");
 
-        // Tokenize..
-        Tokenizer tokenizer(&settings, this);
-        std::istringstream istr("#define SOMETHING \n#include <abc.h>;\n#include <xyz>;");
-        tokenizer.tokenize(istr, "test.cpp");
-
-        CheckUnusedIncludes CheckUnusedIncludes(&tokenizer, &settings, this);
-        CheckUnusedIncludes.parseTokens(tokenizer);
-        ASSERT_EQUALS(0, CheckUnusedIncludes.GetIncludeMap().size());
-        const CheckUnusedIncludes::IncludeMap& includeMap = CheckUnusedIncludes.GetIncludeMap();
+        ASSERT_EQUALS(0, c.GetIncludeMap().size());
+        const CheckUnusedIncludes::IncludeMap& includeMap = c.GetIncludeMap();
         ASSERT_EQUALS(false, includeMap.find("abc.h") != includeMap.end());
         ASSERT_EQUALS(false, includeMap.find("xyz") != includeMap.end());
     }
     void parseIncludesQuotes() {
-        Settings settings;
-        settings.addEnabled("style");
+        CheckUnusedIncludes c;
+        check(c, "#define SOMETHING \n#include \"abc.h\";\n#include \"xyz.hpp\";");
 
-        // Tokenize..
-        Tokenizer tokenizer(&settings, this);
-        std::istringstream istr("#define SOMETHING \n#include \"abc.h\";\n#include \"xyz.hpp\";");
-        tokenizer.tokenize(istr, "test.cpp");
-
-        CheckUnusedIncludes CheckUnusedIncludes(&tokenizer, &settings, this);
-        CheckUnusedIncludes.parseTokens(tokenizer);
-        ASSERT_EQUALS(2, CheckUnusedIncludes.GetIncludeMap().size());
-        const CheckUnusedIncludes::IncludeMap& includeMap = CheckUnusedIncludes.GetIncludeMap();
+        ASSERT_EQUALS(2, c.GetIncludeMap().size());
+        const CheckUnusedIncludes::IncludeMap& includeMap = c.GetIncludeMap();
         ASSERT_EQUALS(true, includeMap.find("abc.h") != includeMap.end());
         ASSERT_EQUALS(true, includeMap.find("xyz.hpp") != includeMap.end());
     }
     void parseIncludesWithPath() {
-        Settings settings;
-        settings.addEnabled("style");
+        CheckUnusedIncludes c;
+        check(c, "#define SOMETHING \n#include \"..\\abc.h\";\n#include \"../seven/xyz.hpp\";");
 
-        // Tokenize..
-        Tokenizer tokenizer(&settings, this);
-        std::istringstream istr("#define SOMETHING \n#include \"..\\abc.h\";\n#include \"../seven/xyz.hpp\";");
-        tokenizer.tokenize(istr, "test.cpp");
-
-        CheckUnusedIncludes CheckUnusedIncludes(&tokenizer, &settings, this);
-        CheckUnusedIncludes.parseTokens(tokenizer);
-        ASSERT_EQUALS(2, CheckUnusedIncludes.GetIncludeMap().size());
-        const CheckUnusedIncludes::IncludeMap& includeMap = CheckUnusedIncludes.GetIncludeMap();
+        ASSERT_EQUALS(2, c.GetIncludeMap().size());
+        const CheckUnusedIncludes::IncludeMap& includeMap = c.GetIncludeMap();
         ASSERT_EQUALS(true, includeMap.find("abc.h") != includeMap.end());
         ASSERT_EQUALS(true, includeMap.find("xyz.hpp") != includeMap.end());
     }
@@ -255,25 +235,16 @@ private:
 		ASSERT_EQUALS("file1.h (3) :\n\tfile1.cpp\n\tfile2.cpp\n\tfile2.h\nfile2.h (1) :\n\tfile2.cpp\n", dependencies);
     }
 	void noIncludeDuplicationForMultipleConditionalCompiles()
-	{	
-        Settings settings;
-        settings.addEnabled("style");
+    {	
+        CheckUnusedIncludes c;
+        check(c, 
+            "#ifdef ABC \n#include \"abc.h\";\nbool b = true; \n#else \n#include \"abc.h\";\n \
+			bool b = false; \n \
+			#endif \\ ABC \n \
+			if(b) { \n \
+			return; \n \
+			}");
 
-        // Tokenize..
-        Tokenizer tokenizer(&settings, this);
-		std::istringstream istr("#ifdef ABC \n#include \"abc.h\";\nbool b = true; \n#else \n#include \"abc.h\";\n \
-								bool b = false; \n \
-								#endif \\ ABC \n \
-								if(b) { \n \
-								return; \n \
-								}");
-		expandMacros(istr.str());
-        tokenizer.tokenize(istr, "test.cpp");
-
-        CheckUnusedIncludes c(&tokenizer, &settings, this);
-        c.parseTokens(tokenizer);
-        c.check(this);
-        
 		const CheckUnusedIncludes::IncludeUsage &incl = c.GetIncludeMap().begin()->second;
 		ASSERT_EQUALS(1, incl.dependencySet.size());
 	}
@@ -328,34 +299,25 @@ private:
 	}
 
     void checkDeclaredVar_manual() {
-        Settings settings;
-        settings.addEnabled("style");
-
-        // Tokenize..
-        Tokenizer tokenizer(&settings, this);
-        std::istringstream istr("#include \"abc.h\";\n"
-                                "class xyz;\n"
-                                "class myClass{\n"
-                                    "public:\n"
-                                    "enum myEnum{\n"
-                                        "eNone = 0,\n"
-                                        "eOne };\n"
-                                    "abc Type_abc1;\n"
-                                    "struct myStruct{\n"
-                                        "xyz* Type_xyz1;\n"
-                                    "};\n"
-                                    "static std::string str1;\n"
-                                    "static const std::string str2;\n"
-                                    "const std::string* pStr1;\n"
-                                    "const char charArr[];\n"
-                                    "void f(const char* pChar) {}"
-                                "};"
-                                );
-        expandMacros(istr.str());
-        tokenizer.tokenize(istr, "test.cpp");
-        CheckUnusedIncludes c(&tokenizer, &settings, this);
-        c.parseTokens(tokenizer);
-        c.check(this);
+        CheckUnusedIncludes c;
+        check(c,"#include \"abc.h\";\n"
+                "class xyz;\n"
+                "class myClass{\n"
+                    "public:\n"
+                    "enum myEnum{\n"
+                        "eNone = 0,\n"
+                        "eOne };\n"
+                    "abc Type_abc1;\n"
+                    "struct myStruct{\n"
+                        "xyz* Type_xyz1;\n"
+                    "};\n"
+                    "static std::string str1;\n"
+                    "static const std::string str2;\n"
+                    "const std::string* pStr1;\n"
+                    "const char charArr[];\n"
+                    "void f(const char* pChar) {}"
+                "};"
+            );
 
         const CheckUnusedIncludes::DeclaredSymbolsSet& declaredSymbols = c.GetDeclaredSymbolsSet();
         unsigned int expectedSymbolCount = 3;
@@ -374,12 +336,9 @@ private:
 
 
     void checkRequiredVar() {
-        Settings settings;
-        settings.addEnabled("style");
-
-        // Tokenize..
-        Tokenizer tokenizer(&settings, this);
-        std::istringstream istr("#include \"abc.h\";\n"
+        CheckUnusedIncludes c;
+        check(c, 
+            "#include \"abc.h\";\n"
             "class xyz;\n"
             "class myClass{\n"
             "public:\n"
@@ -397,11 +356,6 @@ private:
             "void f(const char* pChar) {}"
             "};"
             );
-        expandMacros(istr.str());
-        tokenizer.tokenize(istr, "test.cpp");
-        CheckUnusedIncludes c(&tokenizer, &settings, this);
-        c.parseTokens(tokenizer);
-        c.check(this);
 
         const CheckUnusedIncludes::RequiredSymbolsSet& requiredSymbols = c.GetRequiredSymbolsSet();
         unsigned int expectedSymbolCount = 2;
@@ -418,12 +372,8 @@ private:
 
 
     void checkAnonymousEnum() {
-        Settings settings;
-        settings.addEnabled("style");
-
-        // Tokenize..
-        Tokenizer tokenizer(&settings, this);
-        std::istringstream istr(
+        CheckUnusedIncludes c;
+        check(c, 
             "enum myEnum{\n"
             "eNone = 0,\n"
             "eOne };\n"
@@ -431,11 +381,6 @@ private:
             "eAnonNone = 0,\n"
             "eAnonOne };\n"
             );
-        expandMacros(istr.str());
-        tokenizer.tokenize(istr, "test.cpp");
-        CheckUnusedIncludes c(&tokenizer, &settings, this);
-        c.parseTokens(tokenizer);
-        c.check(this);
 
         const CheckUnusedIncludes::DeclaredSymbolsSet& declaredSymbols = c.GetDeclaredSymbolsSet();
         unsigned int expectedSymbolCount = 1;
@@ -448,19 +393,10 @@ private:
         }
     }
     void checkTypeDef() {
-        Settings settings;
-        settings.addEnabled("style");
-
-        // Tokenize..
-        Tokenizer tokenizer(&settings, this);
-        std::istringstream istr(
+        CheckUnusedIncludes c;
+        check(c, 
             "typedef std::set<std::string> IncludeDependencySet;\n"
             );
-        expandMacros(istr.str());
-        tokenizer.tokenize(istr, "test.cpp");
-        CheckUnusedIncludes c(&tokenizer, &settings, this);
-        c.parseTokens(tokenizer);
-        c.check(this);
 
         const CheckUnusedIncludes::DeclaredSymbolsSet& declaredSymbols = c.GetDeclaredSymbolsSet();
         unsigned int expectedSymbolCount = 1;
@@ -474,22 +410,14 @@ private:
     }
 	
     void Typedef5() {
-        Settings settings;
-        settings.addEnabled("style");
-        // Tokenize..
-        Tokenizer tokenizer(&settings, this);
-        std::istringstream istr(
+        CheckUnusedIncludes c;
+        check(c, 
             "typedef struct yy_buffer_state *YY_BUFFER_STATE;\n"
             "void f()\n"
             "{\n"
             "    YY_BUFFER_STATE state;\n"
             "}\n"
             );
-        expandMacros(istr.str());
-        tokenizer.tokenize(istr, "test.cpp");
-        CheckUnusedIncludes c(&tokenizer, &settings, this);
-        c.parseTokens(tokenizer);
-        c.check(this);
 
         const CheckUnusedIncludes::DeclaredSymbolsSet& declaredSymbols = c.GetDeclaredSymbolsSet();
         unsigned int expectedSymbolCount = 1;
@@ -502,19 +430,9 @@ private:
         }
     }
     void Typedef7() {
-        Settings settings;
-        settings.addEnabled("style");
-        // Tokenize..
-        Tokenizer tokenizer(&settings, this);
-        std::istringstream istr(
-            "typedef int abc ; "
-            "Fred :: abc f ;"
-            );
-        expandMacros(istr.str());
-        tokenizer.tokenize(istr, "test.cpp");
-        CheckUnusedIncludes c(&tokenizer, &settings, this);
-        c.parseTokens(tokenizer);
-        c.check(this);
+        CheckUnusedIncludes c;
+        check(c, "typedef int abc ; "
+                 "Fred :: abc f ;");
 
         const CheckUnusedIncludes::DeclaredSymbolsSet& declaredSymbols = c.GetDeclaredSymbolsSet();
         unsigned int expectedSymbolCount = 0;
