@@ -65,6 +65,14 @@ private:
         TEST_CASE(checkTypeDef);
         TEST_CASE(Typedef5);
         TEST_CASE(Typedef7);
+        TEST_CASE(Typedef9);
+        TEST_CASE(Typedef19);
+        TEST_CASE(Typedef10);
+        TEST_CASE(Typedef11);
+        TEST_CASE(Typedef12);
+        TEST_CASE(Typedef15);
+        TEST_CASE(Typedef21);
+        TEST_CASE(Typedef22);
     }
     void check(CheckUnusedIncludes &c, const char code[]) {
         // Clear the error buffer..
@@ -438,8 +446,10 @@ private:
         unsigned int expectedSymbolCount = 0;
         ASSERT_EQUALS(expectedSymbolCount, declaredSymbols.size());
     }
-    /*void Typedef9() {
-        const char code[] = "typedef struct s S, * PS;\n"
+    void Typedef9() {
+
+        CheckUnusedIncludes c;
+        check(c, "typedef struct s S, * PS;\n"
                             "typedef struct t { int a; } T, *TP;\n"
                             "typedef struct { int a; } U;\n"
                             "typedef struct { int a; } * V;\n"
@@ -448,41 +458,51 @@ private:
                             "T t;\n"
                             "TP tp;\n"
                             "U u;\n"
-                            "V v;";
-
-        const char expected[] =
-            "struct t { int a ; } ; "
-            "struct U { int a ; } ; "
-            "struct Unnamed0 { int a ; } ; "
-            "struct s s ; "
-            "struct s * ps ; "
-            "struct t t ; "
-            "struct t * tp ; "
-            "struct U u ; "
-            "struct Unnamed0 * v ;";
-
-        ASSERT_EQUALS(expected, tok(code, false));
+                            "V v;");
+// 
+//         const char expected[] =
+//             "struct t { int a ; } ; "
+//             "struct U { int a ; } ; "
+//             "struct Unnamed0 { int a ; } ; "
+//             "struct s s ; "
+//             "struct s * ps ; "
+//             "struct t t ; "
+//             "struct t * tp ; "
+//             "struct U u ; "
+//             "struct Unnamed0 * v ;";
+// 
+        //         ASSERT_EQUALS(expected, tok(code, false));
+        const CheckUnusedIncludes::DeclaredSymbolsSet& declaredSymbols = c.GetDeclaredSymbolsSet();
+        unsigned int expectedSymbolCount = 0;
+        ASSERT_EQUALS(expectedSymbolCount, declaredSymbols.size());
     }
     void Typedef19() {
         {
             // ticket #1275
-            const char code[] = "typedef struct {} A, *B, **C;\n"
+
+            CheckUnusedIncludes c;
+            check(c, "typedef struct {} A, *B, **C;\n"
                                 "A a;\n"
                                 "B b;\n"
-                                "C c;";
+                                "C c;");
 
-            const char expected[] =
-                "struct A { } ; "
-                "struct A a ; "
-                "struct A * b ; "
-                "struct A * * c ;";
-
-            ASSERT_EQUALS(expected, tok(code, false));
+//             const char expected[] =
+//                 "struct A { } ; "
+//                 "struct A a ; "
+//                 "struct A * b ; "
+//                 "struct A * * c ;";
+// 
+//             ASSERT_EQUALS(expected, tok(code, false));
+            const CheckUnusedIncludes::DeclaredSymbolsSet& declaredSymbols = c.GetDeclaredSymbolsSet();
+            unsigned int expectedSymbolCount = 0;
+            ASSERT_EQUALS(expectedSymbolCount, declaredSymbols.size());
         }
 	}
 	
     void Typedef10() {
-        const char code[] = "typedef union s S, * PS;\n"
+
+        CheckUnusedIncludes c;
+        check(c, "typedef union s S, * PS;\n"
                             "typedef union t { int a; float b ; } T, *TP;\n"
                             "typedef union { int a; float b; } U;\n"
                             "typedef union { int a; float b; } * V;\n"
@@ -491,106 +511,144 @@ private:
                             "T t;\n"
                             "TP tp;\n"
                             "U u;\n"
-                            "V v;";
+                            "V v;");
 
-        const char expected[] =
-            "union t { int a ; float b ; } ; "
-            "union U { int a ; float b ; } ; "
-            "union Unnamed1 { int a ; float b ; } ; "
-            "union s s ; "
-            "union s * ps ; "
-            "union t t ; "
-            "union t * tp ; "
-            "union U u ; "
-            "union Unnamed1 * v ;";
-
-        ASSERT_EQUALS(expected, tok(code, false));
+//         const char expected[] =
+//             "union t { int a ; float b ; } ; "
+//             "union U { int a ; float b ; } ; "
+//             "union Unnamed1 { int a ; float b ; } ; "
+//             "union s s ; "
+//             "union s * ps ; "
+//             "union t t ; "
+//             "union t * tp ; "
+//             "union U u ; "
+//             "union Unnamed1 * v ;";
+// 
+//         ASSERT_EQUALS(expected, tok(code, false));
+        const CheckUnusedIncludes::DeclaredSymbolsSet& declaredSymbols = c.GetDeclaredSymbolsSet();
+        unsigned int expectedSymbolCount = 0;
+        ASSERT_EQUALS(expectedSymbolCount, declaredSymbols.size());
     }
 
     void Typedef11() {
-        const char code[] = "typedef enum { a = 0 , b = 1 , c = 2 } abc;\n"
+
+        CheckUnusedIncludes c;
+        check(c, "typedef enum { a = 0 , b = 1 , c = 2 } abc;\n"
                             "typedef enum xyz { x = 0 , y = 1 , z = 2 } XYZ;\n"
                             "abc e1;\n"
-                            "XYZ e2;";
+                            "XYZ e2;");
 
-        const char expected[] = "int e1 ; "
-                                "int e2 ;";
+//         const char expected[] = "int e1 ; "
+//                                 "int e2 ;";
+// 
+//         ASSERT_EQUALS(expected, tok(code, false));
 
-        ASSERT_EQUALS(expected, tok(code, false));
+        const CheckUnusedIncludes::DeclaredSymbolsSet& declaredSymbols = c.GetDeclaredSymbolsSet();
+        unsigned int expectedSymbolCount = 0;
+        ASSERT_EQUALS(expectedSymbolCount, declaredSymbols.size());
     }
 
     void Typedef12() {
-        const char code[] = "typedef vector<int> V1;\n"
+
+        CheckUnusedIncludes c;
+        check(c, "typedef vector<int> V1;\n"
                             "typedef std::vector<int> V2;\n"
                             "typedef std::vector<std::vector<int> > V3;\n"
                             "typedef std::list<int>::iterator IntListIterator;\n"
                             "V1 v1;\n"
                             "V2 v2;\n"
                             "V3 v3;\n"
-                            "IntListIterator iter;";
+                            "IntListIterator iter;");
 
-        const char expected[] =
-            "vector < int > v1 ; "
-            "std :: vector < int > v2 ; "
-            "std :: vector < std :: vector < int > > v3 ; "
-            "std :: list < int > :: iterator iter ;";
+//         const char expected[] =
+//             "vector < int > v1 ; "
+//             "std :: vector < int > v2 ; "
+//             "std :: vector < std :: vector < int > > v3 ; "
+//             "std :: list < int > :: iterator iter ;";
+// 
+//         ASSERT_EQUALS(expected, tok(code, false));
 
-        ASSERT_EQUALS(expected, tok(code, false));
+        const CheckUnusedIncludes::DeclaredSymbolsSet& declaredSymbols = c.GetDeclaredSymbolsSet();
+        unsigned int expectedSymbolCount = 0;
+        ASSERT_EQUALS(expectedSymbolCount, declaredSymbols.size());
     }
     void Typedef15() {
         {
-            const char code[] = "typedef char frame[10];\n"
-                                "frame f;";
 
-            const char expected[] = "char f [ 10 ] ;";
+            CheckUnusedIncludes c;
+            check(c, "typedef char frame[10];\n"
+                                "frame f;");
 
-            ASSERT_EQUALS(expected, tok(code, false));
+//             const char expected[] = "char f [ 10 ] ;";
+// 
+//             ASSERT_EQUALS(expected, tok(code, false));
+
+            const CheckUnusedIncludes::DeclaredSymbolsSet& declaredSymbols = c.GetDeclaredSymbolsSet();
+            unsigned int expectedSymbolCount = 0;
+            ASSERT_EQUALS(expectedSymbolCount, declaredSymbols.size());
         }
 
         {
-            const char code[] = "typedef unsigned char frame[10];\n"
-                                "frame f;";
 
-            const char expected[] = "unsigned char f [ 10 ] ;";
+            CheckUnusedIncludes c;
+            check(c, "typedef unsigned char frame[10];\n"
+                                "frame f;");
 
-            ASSERT_EQUALS(expected, tok(code, false));
+//             const char expected[] = "unsigned char f [ 10 ] ;";
+// 
+//             ASSERT_EQUALS(expected, tok(code, false));
+
+            const CheckUnusedIncludes::DeclaredSymbolsSet& declaredSymbols = c.GetDeclaredSymbolsSet();
+            unsigned int expectedSymbolCount = 0;
+            ASSERT_EQUALS(expectedSymbolCount, declaredSymbols.size());
         }
     }
     void Typedef21() {
-        const char code[] = "typedef void (* PF)();\n"
+
+        CheckUnusedIncludes c;
+        check(c, "typedef void (* PF)();\n"
                             "typedef void * (* PFV)(void *);\n"
                             "PF pf;\n"
-                            "PFV pfv;";
+                            "PFV pfv;");
 
-        const char expected[] =
-            ""
-            ""
-            "void ( * pf ) ( ) ; "
-            "void * ( * pfv ) ( void * ) ;";
+//         const char expected[] =
+//             ""
+//             ""
+//             "void ( * pf ) ( ) ; "
+//             "void * ( * pfv ) ( void * ) ;";
+// 
+//         ASSERT_EQUALS(expected, Typedef(code));
 
-        ASSERT_EQUALS(expected, Typedef(code));
+        const CheckUnusedIncludes::DeclaredSymbolsSet& declaredSymbols = c.GetDeclaredSymbolsSet();
+        unsigned int expectedSymbolCount = 0;
+        ASSERT_EQUALS(expectedSymbolCount, declaredSymbols.size());
     }
 	void Typedef22() {
         {
-            const char code[] = "class Fred {\n"
+
+            CheckUnusedIncludes c;
+            check(c, "class Fred {\n"
                                 "    typedef void * (*testfp)(void *);\n"
                                 "    testfp get() { return test; }\n"
                                 "    static void * test(void * p) { return p; }\n"
-                                "};\n";
+                                "};\n");
 
-            const char expected[] =
-                "class Fred { "
-                ""
-                "void * ( * get ( ) ) ( void * ) { return test ; } "
-                "static void * test ( void * p ) { return p ; } "
-                "} ;";
+//             const char expected[] =
+//                 "class Fred { "
+//                 ""
+//                 "void * ( * get ( ) ) ( void * ) { return test ; } "
+//                 "static void * test ( void * p ) { return p ; } "
+//                 "} ;";
+// 
+//             ASSERT_EQUALS(expected, tok(code, false));
 
-            ASSERT_EQUALS(expected, tok(code, false));
+            const CheckUnusedIncludes::DeclaredSymbolsSet& declaredSymbols = c.GetDeclaredSymbolsSet();
+            unsigned int expectedSymbolCount = 0;
+            ASSERT_EQUALS(expectedSymbolCount, declaredSymbols.size());
         }
 	}
 
 
-	*/
 };
 
 REGISTER_TEST(TestUnusedIncludes)
