@@ -63,6 +63,8 @@ private:
 
         TEST_CASE(checkAnonymousEnum);
         TEST_CASE(checkTypeDef);
+        TEST_CASE(Typedef5);
+        TEST_CASE(Typedef7);
     }
     void check(const char code[]) {
         // Clear the error buffer..
@@ -470,31 +472,55 @@ private:
             ASSERT_EQUALS("IncludeDependencySet", it->c_str());
         }
     }
-	/*
+	
     void Typedef5() {
-        // ticket #780
-        const char code[] =
+        Settings settings;
+        settings.addEnabled("style");
+        // Tokenize..
+        Tokenizer tokenizer(&settings, this);
+        std::istringstream istr(
             "typedef struct yy_buffer_state *YY_BUFFER_STATE;\n"
             "void f()\n"
             "{\n"
             "    YY_BUFFER_STATE state;\n"
-            "}\n";
+            "}\n"
+            );
+        expandMacros(istr.str());
+        tokenizer.tokenize(istr, "test.cpp");
+        CheckUnusedIncludes c(&tokenizer, &settings, this);
+        c.parseTokens(tokenizer);
+        c.check(this);
 
-        const char expected[] =
-            "void f ( ) "
-            "{ "
-            "struct yy_buffer_state * state ; "
-            "}";
+        const CheckUnusedIncludes::DeclaredSymbolsSet& declaredSymbols = c.GetDeclaredSymbolsSet();
+        unsigned int expectedSymbolCount = 1;
+        ASSERT_EQUALS(expectedSymbolCount, declaredSymbols.size());
 
-        ASSERT_EQUALS(expected, tok(code, false));
+        if (declaredSymbols.size() >= expectedSymbolCount)
+        {
+            CheckUnusedIncludes::DeclaredSymbolsSet::const_iterator it = declaredSymbols.begin();
+            ASSERT_EQUALS("YY_BUFFER_STATE", it->c_str());
+        }
     }
     void Typedef7() {
-        const char code[] = "typedef int abc ; "
-                            "Fred :: abc f ;";
-        const char expected[] = "Fred :: abc f ;";
-        ASSERT_EQUALS(expected, tok(code, false));
+        Settings settings;
+        settings.addEnabled("style");
+        // Tokenize..
+        Tokenizer tokenizer(&settings, this);
+        std::istringstream istr(
+            "typedef int abc ; "
+            "Fred :: abc f ;"
+            );
+        expandMacros(istr.str());
+        tokenizer.tokenize(istr, "test.cpp");
+        CheckUnusedIncludes c(&tokenizer, &settings, this);
+        c.parseTokens(tokenizer);
+        c.check(this);
+
+        const CheckUnusedIncludes::DeclaredSymbolsSet& declaredSymbols = c.GetDeclaredSymbolsSet();
+        unsigned int expectedSymbolCount = 0;
+        ASSERT_EQUALS(expectedSymbolCount, declaredSymbols.size());
     }
-    void Typedef9() {
+    /*void Typedef9() {
         const char code[] = "typedef struct s S, * PS;\n"
                             "typedef struct t { int a; } T, *TP;\n"
                             "typedef struct { int a; } U;\n"

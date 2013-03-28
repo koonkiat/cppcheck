@@ -263,7 +263,10 @@ void CheckUnusedIncludes::parseTokenForTypedef( const Tokenizer &tokenizer )
                 tok = typeEnd;
                 tokOffset = tok->next();
             }
-            _declaredSymbols.insert(tokOffset->str());
+            if (!typeStart->isStandardType())
+            {
+                _declaredSymbols.insert(tokOffset->str());
+            }
         }
     }
 }
