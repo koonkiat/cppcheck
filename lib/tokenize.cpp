@@ -1789,6 +1789,7 @@ bool Tokenizer::tokenize(std::istream &code,
 
     simplifyDebugNew();
 
+#ifndef INCLUDE_CHECKER
     // typedef..
     if (m_timerResults) {
         Timer t("Tokenizer::tokenize::simplifyTypedef", _settings->_showtime, m_timerResults);
@@ -1796,6 +1797,7 @@ bool Tokenizer::tokenize(std::istream &code,
     } else {
         simplifyTypedef();
     }
+#endif
 
     for (Token* tok = list.front(); tok;) {
         if (Token::Match(tok, "union|struct|class union|struct|class"))

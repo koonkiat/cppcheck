@@ -471,7 +471,7 @@ private:
         }
     }
 	/*
-    void simplifyTypedef5() {
+    void Typedef5() {
         // ticket #780
         const char code[] =
             "typedef struct yy_buffer_state *YY_BUFFER_STATE;\n"
@@ -488,13 +488,13 @@ private:
 
         ASSERT_EQUALS(expected, tok(code, false));
     }
-    void simplifyTypedef7() {
+    void Typedef7() {
         const char code[] = "typedef int abc ; "
                             "Fred :: abc f ;";
         const char expected[] = "Fred :: abc f ;";
         ASSERT_EQUALS(expected, tok(code, false));
     }
-    void simplifyTypedef9() {
+    void Typedef9() {
         const char code[] = "typedef struct s S, * PS;\n"
                             "typedef struct t { int a; } T, *TP;\n"
                             "typedef struct { int a; } U;\n"
@@ -519,7 +519,7 @@ private:
 
         ASSERT_EQUALS(expected, tok(code, false));
     }
-    void simplifyTypedef19() {
+    void Typedef19() {
         {
             // ticket #1275
             const char code[] = "typedef struct {} A, *B, **C;\n"
@@ -537,7 +537,7 @@ private:
         }
 	}
 	
-    void simplifyTypedef10() {
+    void Typedef10() {
         const char code[] = "typedef union s S, * PS;\n"
                             "typedef union t { int a; float b ; } T, *TP;\n"
                             "typedef union { int a; float b; } U;\n"
@@ -563,7 +563,7 @@ private:
         ASSERT_EQUALS(expected, tok(code, false));
     }
 
-    void simplifyTypedef11() {
+    void Typedef11() {
         const char code[] = "typedef enum { a = 0 , b = 1 , c = 2 } abc;\n"
                             "typedef enum xyz { x = 0 , y = 1 , z = 2 } XYZ;\n"
                             "abc e1;\n"
@@ -575,7 +575,7 @@ private:
         ASSERT_EQUALS(expected, tok(code, false));
     }
 
-    void simplifyTypedef12() {
+    void Typedef12() {
         const char code[] = "typedef vector<int> V1;\n"
                             "typedef std::vector<int> V2;\n"
                             "typedef std::vector<std::vector<int> > V3;\n"
@@ -593,7 +593,7 @@ private:
 
         ASSERT_EQUALS(expected, tok(code, false));
     }
-    void simplifyTypedef15() {
+    void Typedef15() {
         {
             const char code[] = "typedef char frame[10];\n"
                                 "frame f;";
@@ -612,7 +612,7 @@ private:
             ASSERT_EQUALS(expected, tok(code, false));
         }
     }
-    void simplifyTypedef21() {
+    void Typedef21() {
         const char code[] = "typedef void (* PF)();\n"
                             "typedef void * (* PFV)(void *);\n"
                             "PF pf;\n"
@@ -624,9 +624,9 @@ private:
             "void ( * pf ) ( ) ; "
             "void * ( * pfv ) ( void * ) ;";
 
-        ASSERT_EQUALS(expected, simplifyTypedef(code));
+        ASSERT_EQUALS(expected, Typedef(code));
     }
-	void simplifyTypedef22() {
+	void Typedef22() {
         {
             const char code[] = "class Fred {\n"
                                 "    typedef void * (*testfp)(void *);\n"
