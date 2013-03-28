@@ -51,6 +51,9 @@ public:
     void parseTokens(const Tokenizer &tokenizer);
 	void parseTokensForIncludes(const Tokenizer &tokenizer);
     void parseTokensForDeclaredTypes(const Tokenizer &tokenizer);
+
+    void parseTokenForTypedef( const Tokenizer &tokenizer );
+
     void parseTokensForRequiredTypes(const Tokenizer &tokenizer);
 
     void check(ErrorLogger * const errorLogger);

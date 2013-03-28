@@ -96,6 +96,8 @@ void CheckUnusedIncludes::parseTokensForDeclaredTypes(const Tokenizer &tokenizer
         }
     }
     // todo parsing for typedef
+    parseTokenForTypedef(tokenizer);
+
 }
 void CheckUnusedIncludes::parseTokensForRequiredTypes(const Tokenizer &tokenizer)
 {
@@ -196,4 +198,72 @@ void CheckUnusedIncludes::GetIncludeDependencies(std::string & out_String)
 			out_String.append("\t" + *str_it + "\n");
 		}
 	}
+}
+
+void CheckUnusedIncludes::parseTokenForTypedef( const Tokenizer &tokenizer )
+{
+    for (const Token *tok = tokenizer.tokens(); tok; tok = tok->next()) {
+        if (tok->fileIndex() != 0)
+            continue;
+        if(Token::Match(tok, "typedef %type%")) {
+            Token* tokOffset = tok->next();
+            Token* typeEnd = NULL;
+            Token *typeStart = NULL;
+
+            if (tok->next()->str() == "::" || Token::Match(tok->next(), "%type%")) {
+                typeStart = tok->next();
+
+                while (Token::Match(tokOffset, "const|signed|unsigned|struct|enum %type%") ||
+                    (tokOffset->next() && tokOffset->next()->isStandardType()))
+                    tokOffset = tokOffset->next();
+
+                typeEnd = tokOffset;
+                tokOffset = tokOffset->next();
+
+                bool atEnd = false;
+                while (!atEnd) {
+                    if (tokOffset && tokOffset->str() == "::") {
+                        typeEnd = tokOffset;
+                        tokOffset = tokOffset->next();
+                    }
+
+                    if (Token::Match(tokOffset, "%type%") &&
+                        tokOffset->next() && !Token::Match(tokOffset->next(), "[|;|,|(")) {
+                            typeEnd = tokOffset;
+                            tokOffset = tokOffset->next();
+                    } else if (Token::simpleMatch(tokOffset, "const (")) {
+                        typeEnd = tokOffset;
+                        tokOffset = tokOffset->next();
+                        atEnd = true;
+                    } else
+                        atEnd = true;
+                }
+            } else
+                continue; // invalid input
+
+            // check for invalid input
+            if (!tokOffset) {
+                return;
+            }
+            // check for template
+            if (tokOffset->str() == "<") {
+                tokOffset->findClosingBracket(typeEnd);
+
+                while (typeEnd && Token::Match(typeEnd->next(), ":: %type%"))
+                    typeEnd = typeEnd->tokAt(2);
+
+                if (!typeEnd) {
+                    // internal error
+                    return;
+                }
+
+                while (Token::Match(typeEnd->next(), "const|volatile"))
+                    typeEnd = typeEnd->next();
+
+                tok = typeEnd;
+                tokOffset = tok->next();
+            }
+            _declaredSymbols.insert(tokOffset->str());
+        }
+    }
 }
