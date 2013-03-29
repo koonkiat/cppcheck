@@ -65,6 +65,7 @@ private:
         TEST_CASE(checkTypeDef);
         TEST_CASE(Typedef5);
         TEST_CASE(Typedef7);
+		/*
         TEST_CASE(Typedef9);
         TEST_CASE(Typedef19);
         TEST_CASE(Typedef10);
@@ -73,6 +74,7 @@ private:
         TEST_CASE(Typedef15);
         TEST_CASE(Typedef21);
         TEST_CASE(Typedef22);
+		*/
     }
     void check(CheckUnusedIncludes &c, const char code[]) {
         // Clear the error buffer..
@@ -443,8 +445,13 @@ private:
                  "Fred :: abc f ;");
 
         const CheckUnusedIncludes::DeclaredSymbolsSet& declaredSymbols = c.GetDeclaredSymbolsSet();
-        unsigned int expectedSymbolCount = 0;
+        unsigned int expectedSymbolCount = 1;
         ASSERT_EQUALS(expectedSymbolCount, declaredSymbols.size());
+        if (declaredSymbols.size() >= expectedSymbolCount)
+        {
+            CheckUnusedIncludes::DeclaredSymbolsSet::const_iterator it = declaredSymbols.begin();
+            ASSERT_EQUALS("abc", it->c_str());
+        }
     }
     void Typedef9() {
 

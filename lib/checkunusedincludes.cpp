@@ -269,10 +269,7 @@ void CheckUnusedIncludes::parseTokenForTypedef( const Tokenizer &tokenizer )
             }
 //             if (Token::Match(tokOffset, "%var%")) {
 //             }
-            if (!typeStart->isStandardType())
-            {
-                _declaredSymbols.insert(tokOffset->str());
-            }
+            _declaredSymbols.insert(tokOffset->str());
         }
     }
 }
