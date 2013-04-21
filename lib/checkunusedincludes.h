@@ -69,14 +69,14 @@ public:
         unsigned int lineNumber;
         bool   usedSameFile;
         bool   usedOtherFile;
-        IncludeDependencySet dependencySet;
+        IncludeDependencySet	dependencySet;
+		DeclaredSymbolsSet		declaredSymbols;
+		RequiredSymbolsSet		requiredSymbols;
     };
     typedef std::map<std::string, IncludeUsage> IncludeMap;
 
     const IncludeMap& GetIncludeMap() { return _includes; }
 	void GetIncludeDependencies(std::string & out_String);
-    const DeclaredSymbolsSet& GetDeclaredSymbolsSet() { return _declaredSymbols; }
-    const RequiredSymbolsSet& GetRequiredSymbolsSet() { return _requiredSymbols; }
 
 private:
 
@@ -107,9 +107,9 @@ private:
         return "Check for includes that are never called\n";
     }
 
+	void GetFileNameFromPath(std::string src_path, std::string& out_filename);
+
     IncludeMap _includes;
-    DeclaredSymbolsSet _declaredSymbols;
-    RequiredSymbolsSet _requiredSymbols;
 };
 /// @}
 //---------------------------------------------------------------------------
