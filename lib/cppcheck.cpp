@@ -39,6 +39,12 @@ static const char ExtraVersion[] = "";
 
 static TimerResults S_timerResults;
 
+#ifdef INCLUDE_CHECKER
+namespace {    
+	CheckUnusedIncludes _checkUnusedIncludes;
+}
+#endif
+
 CppCheck::CppCheck(ErrorLogger &errorLogger, bool useGlobalSuppressions)
     : _errorLogger(errorLogger), exitcode(0), _useGlobalSuppressions(useGlobalSuppressions), tooManyConfigs(false)
 {

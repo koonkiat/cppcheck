@@ -40,6 +40,8 @@ public:
     CheckUnusedIncludes() : Check(myName())
     { }
 
+	~CheckUnusedIncludes();
+	
     /** @brief This constructor is used when running checks. */
     CheckUnusedIncludes(const Tokenizer *tokenizer, const Settings *settings, ErrorLogger *errorLogger)
         : Check(myName(), tokenizer, settings, errorLogger)
