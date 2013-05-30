@@ -110,13 +110,13 @@ void CheckUnusedIncludes::parseTokensForDeclaredTypes(const Tokenizer &tokenizer
 	std::string fileName("");
 	GetFileNameFromPath(tokenizer.getSourceFilePath(), fileName);
 	std::transform(fileName.begin(), fileName.end(), fileName.begin(), ::tolower);
-	IncludeUsage &incl = _includes[ fileName ];
 
     for (std::list<Scope>::const_iterator scope = symbolDatabase->scopeList.begin(); scope != symbolDatabase->scopeList.end(); ++scope) {
         if (scope->isForwardDeclaration()) {
             continue;
         }
         if (scope->isClassOrStruct()) {
+			IncludeUsage &incl = _includes[ fileName ];
             incl.declaredSymbols.insert(scope->className);
         }
     }
@@ -125,6 +125,7 @@ void CheckUnusedIncludes::parseTokensForDeclaredTypes(const Tokenizer &tokenizer
         if (tok->fileIndex() != 0)
             continue;
         if(Token::Match(tok, "enum %var%")) {
+			IncludeUsage &incl = _includes[ fileName ];
             incl.declaredSymbols.insert(tok->strAt(1));
         }
     }
@@ -140,7 +141,6 @@ void CheckUnusedIncludes::parseTokensForRequiredTypes(const Tokenizer &tokenizer
 	std::string fileName("");
 	GetFileNameFromPath(tokenizer.getSourceFilePath(), fileName);
 	std::transform(fileName.begin(), fileName.end(), fileName.begin(), ::tolower);
-    IncludeUsage &incl = _includes[ fileName ];
 
     size_t listCount = symbolDatabase->getVariableListSize();
     for (unsigned int i = 0; i < listCount; ++i)
@@ -159,6 +159,7 @@ void CheckUnusedIncludes::parseTokensForRequiredTypes(const Tokenizer &tokenizer
             if (!isFromStdLib)
             {
                 bool isPointerOrRef = var->typeEndToken()->str() == "*" || var->typeEndToken()->str() == "&";
+				IncludeUsage &incl = _includes[ fileName ];
                 if (isPointerOrRef)
                 {
                     incl.requiredSymbols.insert(var->typeEndToken()->previous()->str());
@@ -262,7 +263,6 @@ void CheckUnusedIncludes::parseTokenForTypedef( const Tokenizer &tokenizer )
 	std::string fileName("");
 	GetFileNameFromPath(tokenizer.getSourceFilePath(), fileName);
 	std::transform(fileName.begin(), fileName.end(), fileName.begin(), ::tolower);
-    IncludeUsage &incl = _includes[ fileName ];
 
     for (const Token *tok = tokenizer.tokens(); tok; tok = tok->next()) {
         if (tok->fileIndex() != 0)
@@ -331,6 +331,7 @@ void CheckUnusedIncludes::parseTokenForTypedef( const Tokenizer &tokenizer )
             }
 //             if (Token::Match(tokOffset, "%var%")) {
 //             }
+			IncludeUsage &incl = _includes[ fileName ];
             incl.declaredSymbols.insert(tokOffset->str());
         }
     }
