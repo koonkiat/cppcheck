@@ -75,7 +75,7 @@ public:
     };
     typedef std::map<std::string, IncludeUsage> IncludeMap;
 
-    const IncludeMap& GetIncludeMap() { return _includes; }
+    const IncludeMap& GetIncludeMap() { return m_includeMap; }
 	void GetIncludeDependencies(std::string & out_String);
 
 private:
@@ -109,7 +109,7 @@ private:
 
 	void GetFileNameFromPath(std::string src_path, std::string& out_filename);
 
-    IncludeMap _includes;
+    IncludeMap m_includeMap;
 };
 /// @}
 //---------------------------------------------------------------------------
